@@ -19,6 +19,10 @@ class Bidder extends EE
       console.log "got #{@user}:#{new_client.id} trigger: ", data
       @sm.trigger data.trigger, data
 
+    new_client.on 'bid', (data) =>
+      console.log "got bid #{@user}:#{new_client.id} bid: ", data
+      @sm.trigger 'bid', data
+
   # wrapper function to emit to the sid room
   emit: (name, args) ->
     global.io.sockets.in(@sid).emit(name, args)

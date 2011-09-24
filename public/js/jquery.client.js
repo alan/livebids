@@ -10,8 +10,8 @@
     return _results;
   })(window.console = window.console || {});
   (function($) {
-    var image, service, socketIoClient;
-    socketIoClient = io.connect(null, {
+    var image, service;
+    window.socketIoClient = io.connect(null, {
       port: "#socketIoPort#",
       rememberTransport: true,
       transports: ["websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket"]
@@ -35,10 +35,32 @@
       }, 500);
       return setTimeout((function() {
         return socketIoClient.send("pong");
-      }), 1000);
+      }), 6000);
+    });
+    socketIoClient.on("newbid", function(bid) {
+      var $current_bid;
+      $current_bid = $('#current_bid');
+      if (!($current_bid[0] != null)) {
+        $current_bid = $('<div id="#current_bid"/>');
+        $current_bid.prependTo('body');
+      }
+      $current_bid.data('current_bid', bid.value);
+      return $current_bid.text("current bid is: " + bid.value);
     });
     return socketIoClient.on("disconnect", function() {
       return $("#connected").removeClass("on").find("strong").text("Offline");
     });
   })(jQuery);
+  $('button.bid').live('click', function() {
+    var current_bid, nextbid;
+    current_bid = $('#current_bid').data('current_bid');
+    if (current_bid != null) {
+      nextbid = current_bid + 1;
+    } else {
+      nextbid = 1;
+    }
+    return socketIoClient.emit('bid', {
+      value: nextbid
+    });
+  });
 }).call(this);

@@ -24,9 +24,13 @@
       this.new_client(client);
     }
     Bidder.prototype.new_client = function(new_client) {
-      return new_client.on('trigger', __bind(function(data) {
+      new_client.on('trigger', __bind(function(data) {
         console.log("got " + this.user + ":" + new_client.id + " trigger: ", data);
         return this.sm.trigger(data.trigger, data);
+      }, this));
+      return new_client.on('bid', __bind(function(data) {
+        console.log("got bid " + this.user + ":" + new_client.id + " bid: ", data);
+        return this.sm.trigger('bid', data);
       }, this));
     };
     Bidder.prototype.emit = function(name, args) {

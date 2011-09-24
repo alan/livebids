@@ -6,7 +6,7 @@
     b[a] = b[a] or c
 ) window.console = window.console or {}
 (($) ->
-  socketIoClient = io.connect(null,
+  window.socketIoClient = io.connect(null,
     port: "#socketIoPort#"
     rememberTransport: true
     transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
@@ -23,9 +23,27 @@
 
     setTimeout (->
       socketIoClient.send "pong"
-    ), 1000
+    ), 6000
+
+  socketIoClient.on "newbid", (bid) ->
+    $current_bid = $('#current_bid')
+    if !$current_bid[0]?
+      $current_bid = $('<div id="#current_bid"/>')
+      $current_bid.prependTo('body')
+    $current_bid.data 'current_bid', bid.value
+    $current_bid.text "current bid is: #{bid.value}"
+    
 
   socketIoClient.on "disconnect", ->
     $("#connected").removeClass("on").find("strong").text "Offline"
 
 ) jQuery
+
+$('button.bid').live 'click', ->
+  current_bid = $('#current_bid').data('current_bid')
+  if current_bid?
+    nextbid =  current_bid + 1
+  else
+    nextbid = 1
+  socketIoClient.emit 'bid', value: nextbid
+
