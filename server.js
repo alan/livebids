@@ -42,9 +42,7 @@
           }
         ]
       }
-    }
-  };
-  ({
+    },
     css: {
       route: /\/static\/css\/[a-z0-9]+\/.*\.css/,
       path: "./public/css/",
@@ -55,7 +53,7 @@
         "^": [assetHandler.fixVendorPrefixes, assetHandler.fixGradients, assetHandler.replaceImageRefToBase64(__dirname + "/public"), assetHandler.yuiCssOptimize]
       }
     }
-  });
+  };
   app.configure("development", function() {
     assetsSettings.js.files.push("jquery.frontend-development.js");
     assetsSettings.css.files.push("frontend-development.css");
