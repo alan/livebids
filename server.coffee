@@ -89,10 +89,9 @@ app.configure "production", ->
   app.all "/robots.txt", (req, res) ->
     res.send "User-agent: *", "Content-Type": "text/plain"
 
-app.dynamicHelpers 
+app.dynamicHelpers
   assetsCacheHashes: (req, res) ->
     assetsMiddleware.cacheHashes
-  
   session: (req, res) ->
     req.session
 
