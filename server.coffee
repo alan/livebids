@@ -17,8 +17,9 @@ assetManager = require("connect-assetmanager")
 assetHandler = require("connect-assetmanager-handlers")
 notifoMiddleware = require("connect-notifo")
 DummyHelper = require("./lib/dummy-helper")
-RedisStore = require("connect-redis")(express)
-sessionStore = new RedisStore
+#RedisStore = require("connect-redis")(express)
+#sessionStore = new RedisStore
+sessionStore = new express.session.MemoryStore()
 app = module.exports = express.createServer()
 app.listen siteConf.port, null
 socketIo = new require("./lib/socket-io-server.js")(app, sessionStore)
