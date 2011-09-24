@@ -49,14 +49,14 @@
     function ClientStateMachine(bidder) {
       this.bidder = bidder;
       ClientStateMachine.__super__.constructor.call(this, 'start', states, events);
-      this.bidder.client.emit('mess', {
+      this.bidder.emit('mess', {
         message: "Welcome! current state is " + this.current_state.name + "."
       });
-      this.bidder.client.emit('auction_list', {
+      this.bidder.emit('auction_list', {
         auction_list: Auction.start_collection.list()
       });
       Auction.start_collection.on('change', __bind(function() {
-        return this.bidder.client.emit('auction_list', {
+        return this.bidder.emit('auction_list', {
           auction_list: Auction.start_collection.list()
         });
       }, this));
@@ -64,7 +64,7 @@
         if (state_name == null) {
           state_name = 'unknown!';
         }
-        return this.bidder.client.emit('mess', {
+        return this.bidder.emit('mess', {
           message: "moved state to " + state_name
         });
       }, this));

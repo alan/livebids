@@ -7,7 +7,7 @@
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  };
+  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   EE = typeof EventEmitter !== "undefined" && EventEmitter !== null ? EventEmitter : require('events').EventEmitter;
   Collection = require('./collection').Collection;
   ClientStateMachine = require('./client_state_machine').ClientStateMachine;
@@ -16,16 +16,21 @@
     Bidder.last_used_id = 0;
     Bidder.collection = new Collection();
     function Bidder(_arg) {
-      this.user = _arg.user, this.client = _arg.client, this.sid = _arg.sid;
+      var client;
+      this.user = _arg.user, client = _arg.client, this.sid = _arg.sid;
       this.sm = new ClientStateMachine(this);
       this.id = this.user;
       this.constructor.collection.add(this);
+      this.new_client(client);
     }
     Bidder.prototype.new_client = function(new_client) {
-      console.log("player " + this.name + " removing client " + this.client.id);
-      new_client._events = this.client._events;
-      this.client = new_client;
-      return console.log("player " + this.id + " added client " + this.client.id);
+      return new_client.on('trigger', __bind(function(data) {
+        console.log("got " + this.user + ":" + new_client.id + " trigger: ", data);
+        return this.sm.trigger(data.trigger, data);
+      }, this));
+    };
+    Bidder.prototype.emit = function(name, args) {
+      return global.io.sockets["in"](this.sid).emit(name, args);
     };
     return Bidder;
   })();

@@ -7,17 +7,21 @@ class Bidder extends EE
   @last_used_id = 0
   @collection = new Collection()
 
-  constructor: (user: @user, client: @client, sid: @sid) ->
+  constructor: (user: @user, client: client, sid: @sid) ->
     @sm = new ClientStateMachine(@)
     @id = @user
     @constructor.collection.add @
+    @new_client(client)
 
   new_client: (new_client) ->
-    # copy bindings...
-    console.log "player #{@name} removing client #{@client.id}"
-    new_client._events = @client._events
-    @client = new_client
-    console.log "player #{@id} added client #{@client.id}"
+    # set up bindings required....
+    new_client.on 'trigger', (data) =>
+      console.log "got #{@user}:#{new_client.id} trigger: ", data
+      @sm.trigger data.trigger, data
+
+  # wrapper function to emit to the sid room
+  emit: (name, args) ->
+    global.io.sockets.in(@sid).emit(name, args)
 
 (exports ? window).Bidder = Bidder
 

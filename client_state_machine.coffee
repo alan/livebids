@@ -31,13 +31,13 @@ events =
 class ClientStateMachine extends StateMachine
   constructor: (@bidder) ->
     super 'start', states, events
-    @bidder.client.emit 'mess', message: "Welcome! current state is #{@current_state.name}."
+    @bidder.emit 'mess', message: "Welcome! current state is #{@current_state.name}."
     # todo move this next line to start state enter.
-    @bidder.client.emit 'auction_list', auction_list: Auction.start_collection.list()
+    @bidder.emit 'auction_list', auction_list: Auction.start_collection.list()
     Auction.start_collection.on 'change', =>
-      @bidder.client.emit 'auction_list', auction_list: Auction.start_collection.list()
+      @bidder.emit 'auction_list', auction_list: Auction.start_collection.list()
 
-    @on 'moved_state', (state_name = 'unknown!') => @bidder.client.emit 'mess', message: "moved state to #{state_name}"
+    @on 'moved_state', (state_name = 'unknown!') => @bidder.emit 'mess', message: "moved state to #{state_name}"
 
 
 (exports ? window).ClientStateMachine = ClientStateMachine
