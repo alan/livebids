@@ -21,7 +21,7 @@ jQuery.cookie = (name, value, options) ->
     if document.cookie and document.cookie != ""
       cookies = document.cookie.split(";")
       i = 0
-      
+
       while i < cookies.length
         cookie = jQuery.trim(cookies[i])
         if cookie.substring(0, name.length + 1) == (name + "=")
