@@ -22,27 +22,23 @@
     image = $.trim($("#image").val());
     service = $.trim($("#service").val());
     socketIoClient.on("message", function(msg) {
-      var $li;
-      $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image));
-      if (service) {
-        $li.append($("<img class=\"service\">").attr("src", service));
-      }
-      $("#bubble ul").prepend($li);
+      var img_src;
+      img_src = $("<img class=\"avatar\">").attr("src", image);
+      $("#bubble ul").prepend(templates.template({
+        data: {
+          msg: msg,
+          img_src: img_src
+        }
+      }));
       $("#bubble").scrollTop(98).stop().animate({
         scrollTop: "0"
       }, 500);
-      setTimeout((function() {
-        return $li.remove();
-      }), 5000);
       return setTimeout((function() {
         return socketIoClient.send("pong");
       }), 1000);
     });
-    socketIoClient.on("disconnect", function() {
+    return socketIoClient.on("disconnect", function() {
       return $("#connected").removeClass("on").find("strong").text("Offline");
     });
-    return $('body').append(templates.template({
-      stooges: ['moe', 'larry', 'curly']
-    }));
   })(jQuery);
 }).call(this);
