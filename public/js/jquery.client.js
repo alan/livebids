@@ -1,16 +1,18 @@
 (function() {
-  (function(b) {
-    var a, c, d, _results;
-    c = function() {};
-    d = "assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info, log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(",");
-    _results = [];
-    while (a = d.pop()) {
-      _results.push(b[a] = b[a] || c);
-    }
-    return _results;
-  })(window.console = window.console || {});
-  (function($) {
+  $(function() {
     var image, service, socketIoClient;
+    image = $.trim($("#image").val());
+    service = $.trim($("#service").val());
+    ($('body')).bind('message', function(e, msg) {
+      $("#bubble ul").prepend(templates.template({
+        data: {
+          msg: msg
+        }
+      }));
+      return $("#bubble").scrollTop(98).stop().animate({
+        scrollTop: "0"
+      }, 500);
+    });
     socketIoClient = io.connect(null, {
       port: "#socketIoPort#",
       rememberTransport: true,
@@ -19,26 +21,17 @@
     socketIoClient.on("connect", function() {
       return $("#connected").addClass("on").find("strong").text("Online");
     });
-    image = $.trim($("#image").val());
-    service = $.trim($("#service").val());
     socketIoClient.on("message", function(msg) {
-      var img_src;
-      img_src = $("<img class=\"avatar\">").attr("src", image);
-      $("#bubble ul").prepend(templates.template({
-        data: {
-          msg: msg,
-          img_src: img_src
-        }
-      }));
-      $("#bubble").scrollTop(98).stop().animate({
-        scrollTop: "0"
-      }, 500);
+      ($('body')).trigger('message', [msg]);
       return setTimeout((function() {
         return socketIoClient.send("pong");
       }), 1000);
     });
+    socketIoClient.on("message", function(msg) {
+      return ($('body')).trigger('message', ['i am also listing on message']);
+    });
     return socketIoClient.on("disconnect", function() {
       return $("#connected").removeClass("on").find("strong").text("Offline");
     });
-  })(jQuery);
+  });
 }).call(this);

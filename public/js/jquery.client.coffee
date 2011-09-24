@@ -1,11 +1,11 @@
-((b) ->
-  c = ->
-  d = "assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info, log,markTimeline,profile,profileEnd,time,timeEnd,trace,warn".split(",")
+$ ->
+  image = $.trim($("#image").val())
+  service = $.trim($("#service").val())
 
-  while a = d.pop()
-    b[a] = b[a] or c
-) window.console = window.console or {}
-(($) ->
+  ($ 'body').bind 'message', (e, msg) ->
+    $("#bubble ul").prepend templates.template(data: {msg: msg})
+    $("#bubble").scrollTop(98).stop().animate scrollTop: "0", 500
+
   socketIoClient = io.connect(null,
     port: "#socketIoPort#"
     rememberTransport: true
@@ -14,18 +14,14 @@
   socketIoClient.on "connect", ->
     $("#connected").addClass("on").find("strong").text "Online"
 
-  image = $.trim($("#image").val())
-  service = $.trim($("#service").val())
   socketIoClient.on "message", (msg) ->
-    img_src = $("<img class=\"avatar\">").attr("src", image)
-    $("#bubble ul").prepend templates.template(data: {msg: msg, img_src: img_src})
-    $("#bubble").scrollTop(98).stop().animate scrollTop: "0", 500
-
+    ($ 'body').trigger('message', [msg])
     setTimeout (->
       socketIoClient.send "pong"
     ), 1000
 
+  socketIoClient.on "message", (msg) ->
+    ($ 'body').trigger('message', ['i am also listing on message'])
+
   socketIoClient.on "disconnect", ->
     $("#connected").removeClass("on").find("strong").text "Offline"
-
-) jQuery
