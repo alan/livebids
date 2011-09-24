@@ -1,6 +1,5 @@
 <input type="hidden" id="image" value="<%= ((session.auth && session.user.image) ? session.user.image : '/img/default.png') %>">
 <input type="hidden" id="service" value="
-    <%= (session.auth && session.auth.github) ? '//github.com/favicon.ico' : '' %>
     <%= (session.auth && session.auth.twitter) ? '//twitter.com/favicon.ico' : '' %>
     <%= (session.auth && session.auth.facebook) ? '//facebook.com/favicon.ico' : '' %>
 ">
@@ -16,7 +15,6 @@
       <% if(!session.auth) {%>
         <li class="facebook"><a href="/auth/facebook"><img src="//facebook.com/favicon.ico" alt="">Facebook</a></li>
         <li class="twitter"><a href="/auth/twitter"><img src="//twitter.com/favicon.ico" alt="">Twitter</a></li>
-        <li class="github"><a href="/auth/github"><img src="//github.com/favicon.ico" alt="">Github</a></li>
       <% } else { %>
         <li class="logout"><a href="/logout">Logout</a></li>
       <% } %>
