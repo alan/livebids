@@ -17,24 +17,22 @@ assetManager = require("connect-assetmanager")
 assetHandler = require("connect-assetmanager-handlers")
 notifoMiddleware = require("connect-notifo")
 DummyHelper = require("./lib/dummy-helper")
-RedisStore = require("connect-redis")(express)
-sessionStore = new RedisStore
+#RedisStore = require("connect-redis")(express)
+#sessionStore = new RedisStore
+sessionStore = new express.session.MemoryStore()
 app = module.exports = express.createServer()
 app.listen siteConf.port, null
 socketIo = new require("./lib/socket-io-server.js")(app, sessionStore)
 authentication = new require("./lib/authentication.js")(app, siteConf)
-assetsSettings = 
-  js: 
+assetsSettings =
+  js:
     route: /\/static\/js\/[a-z0-9]+\/.*\.js/
     path: "./public/js/"
     dataType: "javascript"
     files: [ "http://code.jquery.com/jquery-latest.js", siteConf.uri + "/socket.io/socket.io.js", "jquery.client.js" ]
     debug: true
-    postManipulate: "^": [ assetHandler.uglifyJsOptimize, insertSocketIoPort = (file, path, index, isLast, callback) ->
-      callback file.replace(/.#socketIoPort#./, siteConf.port)
-     ]
-  
-  css: 
+    postManipulate: "^": [ assetHandler.uglifyJsOptimize, insertSocketIoPort = (file, path, index, isLast, callback) -> callback file.replace(/.#socketIoPort#./, siteConf.port) ]
+  css:
     route: /\/static\/css\/[a-z0-9]+\/.*\.css/
     path: "./public/css/"
     dataType: "css"
