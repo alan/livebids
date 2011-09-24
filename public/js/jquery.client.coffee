@@ -17,12 +17,12 @@
     rememberTransport: true
     transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
   )
-  socketIoClient.on_ "connect", ->
+  socketIoClient.on "connect", ->
     $$("#connected").addClass("on").find("strong").text "Online"
 
   image = $.trim($("#image").val())
   service = $.trim($("#service").val())
-  socketIoClient.on_ "message", (msg) ->
+  socketIoClient.on "message", (msg) ->
     $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image))
     $li.append $("<img class=\"service\">").attr("src", service)  if service
     $$("#bubble ul").prepend $li
@@ -34,6 +34,7 @@
       socketIoClient.send "pong"
     ), 1000
 
-  socketIoClient.on_ "disconnect", ->
+  socketIoClient.on "disconnect", ->
     $$("#connected").removeClass("on").find("strong").text "Offline"
+  $('body').append templates.template(stooges: ['moe', 'larry', 'curly'])
 ) jQuery

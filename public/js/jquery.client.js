@@ -26,12 +26,12 @@
       rememberTransport: true,
       transports: ["websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket"]
     });
-    socketIoClient.on_("connect", function() {
+    socketIoClient.on("connect", function() {
       return $$("#connected").addClass("on").find("strong").text("Online");
     });
     image = $.trim($("#image").val());
     service = $.trim($("#service").val());
-    socketIoClient.on_("message", function(msg) {
+    socketIoClient.on("message", function(msg) {
       var $li;
       $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image));
       if (service) {
@@ -48,8 +48,11 @@
         return socketIoClient.send("pong");
       }), 1000);
     });
-    return socketIoClient.on_("disconnect", function() {
+    socketIoClient.on("disconnect", function() {
       return $$("#connected").removeClass("on").find("strong").text("Offline");
     });
+    return $('body').append(templates.template({
+      stooges: ['moe', 'larry', 'curly']
+    }));
   })(jQuery);
 }).call(this);
