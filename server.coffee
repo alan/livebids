@@ -17,6 +17,9 @@ assetManager = require("connect-assetmanager")
 assetHandler = require("connect-assetmanager-handlers")
 notifoMiddleware = require("connect-notifo")
 DummyHelper = require("./lib/dummy-helper")
+Bidder = require("./bidder").Bidder
+
+
 #RedisStore = require("connect-redis")(express)
 #sessionStore = new RedisStore
 sessionStore = new express.session.MemoryStore()

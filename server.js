@@ -1,5 +1,5 @@
 (function() {
-  var DummyHelper, NotFound, airbrake, app, assetHandler, assetManager, assetsMiddleware, assetsSettings, authentication, connect, dummyHelpers, express, insertSocketIoPort, notifoMiddleware, sessionStore, siteConf, socketIo;
+  var Bidder, DummyHelper, NotFound, airbrake, app, assetHandler, assetManager, assetsMiddleware, assetsSettings, authentication, connect, dummyHelpers, express, insertSocketIoPort, notifoMiddleware, sessionStore, siteConf, socketIo;
   NotFound = function(msg) {
     this.name = "NotFound";
     Error.call(this, msg);
@@ -23,6 +23,7 @@
   assetHandler = require("connect-assetmanager-handlers");
   notifoMiddleware = require("connect-notifo");
   DummyHelper = require("./lib/dummy-helper");
+  Bidder = require("./bidder").Bidder;
   sessionStore = new express.session.MemoryStore();
   app = module.exports = express.createServer();
   app.listen(siteConf.port, null);
