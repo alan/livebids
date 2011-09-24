@@ -1,3 +1,2 @@
-ul ->
-  for guy in @stooges
-    li guy
+li  @data.msg
+

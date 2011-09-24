@@ -17,21 +17,15 @@
   image = $.trim($("#image").val())
   service = $.trim($("#service").val())
   socketIoClient.on "message", (msg) ->
-    $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image))
-    $li.append $("<img class=\"service\">").attr("src", service)  if service
-
-    $("#bubble ul").prepend $li
+    img_src = $("<img class=\"avatar\">").attr("src", image)
+    $("#bubble ul").prepend templates.template(data: {msg: msg, img_src: img_src})
     $("#bubble").scrollTop(98).stop().animate scrollTop: "0", 500
-    setTimeout (->
-      $li.remove()
-    ), 5000
+
     setTimeout (->
       socketIoClient.send "pong"
     ), 1000
 
   socketIoClient.on "disconnect", ->
     $("#connected").removeClass("on").find("strong").text "Offline"
-
-  $('body').append templates.template(stooges: ['moe', 'larry', 'curly'])
 
 ) jQuery
