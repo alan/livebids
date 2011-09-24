@@ -10,35 +10,25 @@
     return _results;
   })(window.console = window.console || {});
   (function($) {
-    var $$, image, service, socketIoClient;
-    $$ = (function() {
-      var cache;
-      cache = {};
-      return function(selector) {
-        if (!cache[selector]) {
-          cache[selector] = $(selector);
-        }
-        return cache[selector];
-      };
-    })();
+    var image, service, socketIoClient;
     socketIoClient = io.connect(null, {
       port: "#socketIoPort#",
       rememberTransport: true,
       transports: ["websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket"]
     });
-    socketIoClient.on_("connect", function() {
-      return $$("#connected").addClass("on").find("strong").text("Online");
+    socketIoClient.on("connect", function() {
+      return $("#connected").addClass("on").find("strong").text("Online");
     });
     image = $.trim($("#image").val());
     service = $.trim($("#service").val());
-    socketIoClient.on_("message", function(msg) {
+    socketIoClient.on("message", function(msg) {
       var $li;
       $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image));
       if (service) {
         $li.append($("<img class=\"service\">").attr("src", service));
       }
-      $$("#bubble ul").prepend($li);
-      $$("#bubble").scrollTop(98).stop().animate({
+      $("#bubble ul").prepend($li);
+      $("#bubble").scrollTop(98).stop().animate({
         scrollTop: "0"
       }, 500);
       setTimeout((function() {
@@ -48,8 +38,11 @@
         return socketIoClient.send("pong");
       }), 1000);
     });
-    return socketIoClient.on_("disconnect", function() {
-      return $$("#connected").removeClass("on").find("strong").text("Offline");
+    socketIoClient.on("disconnect", function() {
+      return $("#connected").removeClass("on").find("strong").text("Offline");
     });
+    return $('body').append(templates.template({
+      stooges: ['moe', 'larry', 'curly']
+    }));
   })(jQuery);
 }).call(this);
