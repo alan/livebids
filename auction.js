@@ -1,13 +1,13 @@
 (function() {
-  var Auction, Collection, StateMachine, events, states;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  var Auction, Collection, StateMachine, auction, events, states;
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
     ctor.prototype = parent.prototype;
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
-  }, __slice = Array.prototype.slice;
+  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __slice = Array.prototype.slice;
   StateMachine = require('./sm').StateMachine;
   Collection = require('./collection').Collection;
   states = {
@@ -41,13 +41,9 @@
       },
       callback: function(bidder) {
         var p;
-        bidder.client.on("" + this.namespace + ":trigger", __bind(function(data) {
-          console.log("from " + bidder.user_id + " auction trigger got:", data);
-          return this.trigger(data.trigger, data, bidder);
-        }, this));
         this.bidders.push(bidder);
         this.bidderemit(bidder, 'startup');
-        this.broadcast("new bidder! " + bidder.user_id);
+        this.broadcast("new bidder! " + bidder.user);
         this.broademit("bidder_joined", {
           bidders: (function() {
             var _i, _len, _ref, _results;
@@ -85,7 +81,7 @@
           }
           return _results;
         }).call(this);
-        this.broadcast("bidder left! " + bidder.user_id);
+        this.broadcast("bidder left! " + bidder.user);
         this.broademit("bidder_left", {
           bidders: (function() {
             var _i, _len, _ref, _results;
@@ -106,20 +102,8 @@
         start: 'active'
       },
       callback: function() {
-        var name, pile, _ref;
-        this.broadcast("auction started by " + bidder.user_id);
-        this.broademit("started");
-        this.deck.shuffle();
-        _ref = this.piles;
-        for (name in _ref) {
-          pile = _ref[name];
-          this.broademit('pile', {
-            pile: pile
-          });
-        }
-        return setTimeout(__bind(function() {
-          return this.trigger('shuffled');
-        }, this), 1000);
+        this.broadcast("auction started ");
+        return this.broademit("started");
       }
     },
     bid: {
@@ -127,13 +111,24 @@
         active: 'active'
       },
       callback: function(bid, bidder) {
-        if (bid.amount > this.current_bid.amount) {
+        console.log("auction " + this.item + " got bid " + bid.value + " from " + bidder.user);
+        if (!(this.current_bid != null)) {
+          console.log("first bid accepted " + bid.value + " from " + bidder.user);
+          this.bids.push(bid);
+          this.current_bid = bid;
+          this.broadcast("first bid from " + bidder.id);
+          this.biddercast(bidder, "bid accepted");
+          this.broademit("newbid", bid);
+        }
+        if (bid.value > this.current_bid.value) {
+          console.log("bid accepted");
           this.bids.push(bid);
           this.current_bid = bid;
           this.broadcast("new bid from " + bidder.id);
           this.biddercast(bidder, "bid accepted");
           return this.broademit("newbid", bid);
         } else {
+          console.log("bid rejected");
           return this.biddercast(bidder, "sorry, you've been out bid already");
         }
       }
@@ -148,7 +143,6 @@
       this.current_bid = null;
       this.bids = [];
       this.name = "" + (Math.floor(Math.random() * 1000000000000));
-      this.namespace = "auction:" + this.name;
       this.on('moved_state', __bind(function(state_name) {
         return this.broadcast("auction moved to " + state_name);
       }, this));
@@ -164,37 +158,37 @@
       }, this));
     }
     Auction.prototype.bidderemit = function() {
-      var args, event, p, _ref;
-      p = arguments[0], event = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
-      console.log.apply(console, ["auction " + this.namespace + " bidderemit: " + p.user_id + " " + event].concat(__slice.call(args)));
-      return (_ref = p.client).emit.apply(_ref, ["" + this.namespace + ":" + event].concat(__slice.call(args)));
+      var args, b, event;
+      b = arguments[0], event = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
+      console.log.apply(console, ["auction " + this.item + " bidderemit: " + b.user + " " + event].concat(__slice.call(args)));
+      return b.emit.apply(b, [event].concat(__slice.call(args)));
     };
-    Auction.prototype.biddercast = function(p, message) {
-      console.log("auction " + this.namespace + " biddercast: " + p.user_id + " " + message);
-      return p.client.emit("" + this.namespace + ":broadcast", {
+    Auction.prototype.biddercast = function(b, message) {
+      console.log("auction " + this.item + " biddercast: " + b.user + " " + message);
+      return b.emit("broadcast", {
         message: message
       });
     };
     Auction.prototype.broademit = function() {
-      var args, event, p, _i, _len, _ref, _ref2, _results;
+      var args, b, event, _i, _len, _ref, _results;
       event = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      console.log.apply(console, ["auction " + this.namespace + " broademit: " + event].concat(__slice.call(args)));
+      console.log.apply(console, ["auction " + this.item + " broademit: " + event].concat(__slice.call(args)));
       _ref = this.bidders;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        p = _ref[_i];
-        _results.push((_ref2 = p.client).emit.apply(_ref2, ["" + this.namespace + ":" + event].concat(__slice.call(args))));
+        b = _ref[_i];
+        _results.push(b.emit.apply(b, [event].concat(__slice.call(args))));
       }
       return _results;
     };
     Auction.prototype.broadcast = function(message) {
-      var p, _i, _len, _ref, _results;
-      console.log("auction " + this.namespace + " broadcast: " + message);
+      var b, _i, _len, _ref, _results;
+      console.log("auction " + this.item + " broadcast: " + message);
       _ref = this.bidders;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        p = _ref[_i];
-        _results.push(p.client.emit("" + this.namespace + ":broadcast", {
+        b = _ref[_i];
+        _results.push(b.emit("broadcast", {
           message: message
         }));
       }
@@ -202,9 +196,11 @@
     };
     return Auction;
   })();
-  new Auction({
+  auction = new Auction({
     item: 'Mars Bar',
     description: 'chocolate bar'
   });
+  global.live_auction = auction;
+  auction.trigger('start_auction');
   (typeof exports !== "undefined" && exports !== null ? exports : window).Auction = Auction;
 }).call(this);
