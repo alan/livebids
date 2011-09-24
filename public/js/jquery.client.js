@@ -10,24 +10,14 @@
     return _results;
   })(window.console = window.console || {});
   (function($) {
-    var $$, image, service, socketIoClient;
-    $$ = (function() {
-      var cache;
-      cache = {};
-      return function(selector) {
-        if (!cache[selector]) {
-          cache[selector] = $(selector);
-        }
-        return cache[selector];
-      };
-    })();
+    var image, service, socketIoClient;
     socketIoClient = io.connect(null, {
       port: "#socketIoPort#",
       rememberTransport: true,
       transports: ["websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket"]
     });
     socketIoClient.on("connect", function() {
-      return $$("#connected").addClass("on").find("strong").text("Online");
+      return $("#connected").addClass("on").find("strong").text("Online");
     });
     image = $.trim($("#image").val());
     service = $.trim($("#service").val());
@@ -37,8 +27,8 @@
       if (service) {
         $li.append($("<img class=\"service\">").attr("src", service));
       }
-      $$("#bubble ul").prepend($li);
-      $$("#bubble").scrollTop(98).stop().animate({
+      $("#bubble ul").prepend($li);
+      $("#bubble").scrollTop(98).stop().animate({
         scrollTop: "0"
       }, 500);
       setTimeout((function() {
@@ -49,7 +39,7 @@
       }), 1000);
     });
     socketIoClient.on("disconnect", function() {
-      return $$("#connected").removeClass("on").find("strong").text("Offline");
+      return $("#connected").removeClass("on").find("strong").text("Offline");
     });
     return $('body').append(templates.template({
       stooges: ['moe', 'larry', 'curly']

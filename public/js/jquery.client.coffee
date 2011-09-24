@@ -6,27 +6,22 @@
     b[a] = b[a] or c
 ) window.console = window.console or {}
 (($) ->
-  $$ = (->
-    cache = {}
-    (selector) ->
-      cache[selector] = $(selector)  unless cache[selector]
-      cache[selector]
-  )()
   socketIoClient = io.connect(null,
     port: "#socketIoPort#"
     rememberTransport: true
     transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
   )
   socketIoClient.on "connect", ->
-    $$("#connected").addClass("on").find("strong").text "Online"
+    $("#connected").addClass("on").find("strong").text "Online"
 
   image = $.trim($("#image").val())
   service = $.trim($("#service").val())
   socketIoClient.on "message", (msg) ->
     $li = $("<li>").text(msg).append($("<img class=\"avatar\">").attr("src", image))
     $li.append $("<img class=\"service\">").attr("src", service)  if service
-    $$("#bubble ul").prepend $li
-    $$("#bubble").scrollTop(98).stop().animate scrollTop: "0", 500
+
+    $("#bubble ul").prepend $li
+    $("#bubble").scrollTop(98).stop().animate scrollTop: "0", 500
     setTimeout (->
       $li.remove()
     ), 5000
@@ -35,6 +30,8 @@
     ), 1000
 
   socketIoClient.on "disconnect", ->
-    $$("#connected").removeClass("on").find("strong").text "Offline"
+    $("#connected").removeClass("on").find("strong").text "Offline"
+
   $('body').append templates.template(stooges: ['moe', 'larry', 'curly'])
+
 ) jQuery
