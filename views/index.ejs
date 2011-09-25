@@ -1,4 +1,29 @@
-<input type="hidden" id="image" value="<%= ((session.auth && session.user.image) ? session.user.image : '/img/default.png') %>">
+<div id="container">
+
+<div id="header">
+  <a href="/logout">
+    Logout
+  </a>
+</div>
+
+<div id="status">
+  <p>
+    You are online and can bid
+  </p>
+</div>
+
+<div id="item">
+</div>
+
+<div id='currentbid'>
+  No bids
+</div>
+
+<button class="bid fat-blue"> make bid </button>
+
+</div>
+
+<!-- <input type="hidden" id="image" value="<%= ((session.auth && session.user.image) ? session.user.image : '/img/default.png') %>">
 <input type="hidden" id="service" value="
     <%= (session.auth && session.auth.twitter) ? '//twitter.com/favicon.ico' : '' %>
     <%= (session.auth && session.auth.facebook) ? '//facebook.com/favicon.ico' : '' %>
@@ -10,7 +35,7 @@
     <strong>Online</strong>
     <div class="overlay"></div>
 </div>
-<button class="bid fat-blue"> make bid </a>
+<button class="bid fat-blue"> make bid </button>
 <div class="logins">
     <ul class="padding">
       <% if(!session.auth) {%>
@@ -19,4 +44,4 @@
         <li class="logout"><a href="/logout">Logout</a></li>
       <% } %>
     </ul>
-</div>
+    </div> -->
