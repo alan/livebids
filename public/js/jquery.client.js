@@ -22,7 +22,7 @@
             $current_bid.prependTo('body');
           }
           $current_bid.data('current_bid', bid.value);
-          return $current_bid.text("current bid is: " + bid.value);
+          return $current_bid.text("current bid is: " + bid.value + " from " + bid.user);
         });
         socketIoClient.on("disconnect", function() {
           return $("#connected").removeClass("on").find("strong").text("Offline");
