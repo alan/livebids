@@ -10,6 +10,7 @@ $ ->
         new JoinRoom(msg)
 
       socketIoClient.on "newbid", (bid) ->
+        console.log 'newbid', bid
         new Bid(bid)
 
       socketIoClient.on "disconnect", ->

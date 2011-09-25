@@ -27,6 +27,11 @@ class Bidder extends EE
       else
         console.log "no global live_auction to tribber bid to"
 
+    @emit 'state', state: @state
+
+    if global.live_auction? and global.live_auction.current_bid?
+      @emit 'newbid', global.live_auction.current_bid
+
   login: ->
     @state = "logged_in"
 

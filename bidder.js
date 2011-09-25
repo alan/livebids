@@ -27,7 +27,7 @@
       new_client.on('trigger', __bind(function(data) {
         return console.log("got " + this.name + ":" + new_client.id + " trigger: ", data);
       }, this));
-      return new_client.on('bid', __bind(function(data) {
+      new_client.on('bid', __bind(function(data) {
         console.log("got bid " + this.name + ":" + new_client.id + " bid: ", data);
         if (global.live_auction != null) {
           return global.live_auction.trigger('bid', data, this);
@@ -35,6 +35,12 @@
           return console.log("no global live_auction to tribber bid to");
         }
       }, this));
+      this.emit('state', {
+        state: this.state
+      });
+      if ((global.live_auction != null) && (global.live_auction.current_bid != null)) {
+        return this.emit('newbid', global.live_auction.current_bid);
+      }
     };
     Bidder.prototype.login = function() {
       return this.state = "logged_in";
