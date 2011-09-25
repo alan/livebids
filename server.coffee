@@ -44,8 +44,6 @@ assetsSettings =
     postManipulate: "^": [ assetHandler.fixVendorPrefixes, assetHandler.fixGradients, assetHandler.replaceImageRefToBase64(__dirname + "/public"), assetHandler.yuiCssOptimize ]
 
 app.configure "development", ->
-  assetsSettings.js.files.push "jquery.frontend-development.js"
-  assetsSettings.css.files.push "frontend-development.css"
   [ [ "js", "updatedContent" ], [ "css", "updatedCss" ] ].forEach (group) ->
     assetsSettings[group[0]].postManipulate["^"].push triggerUpdate = (file, path, index, isLast, callback) ->
       callback file
