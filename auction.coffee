@@ -160,18 +160,18 @@ class Auction extends StateMachine
 
    going1: ->
      @broadcast 'going once'
-     @broademit 'going', left: 3
+     @broademit 'going', left: 3, message: 'Going once!'
      a = @
      @going = setTimeout ->
        a.broadcast 'going twice'
-       a.broademit 'going', left: 2
+       a.broademit 'going', left: 2, message: 'Going twice!'
        a.going = setTimeout  ->
          a.broadcast 'going three times'
-         a.broademit 'going', left: 1
+         a.broademit 'going', left: 1, message: 'Going three times...!'
          a.going = setTimeout ->
             a.trigger 'auction_over'
             a.broadcast 'Sold'
-            a.broademit 'going', left: 0
+            a.broademit 'going', left: 0, message: 'Sold!'
          , 2500
        , 2500
      , 2500
