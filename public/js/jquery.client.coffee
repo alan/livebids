@@ -35,7 +35,7 @@
       $current_bid = $('<div id="current_bid"/>')
       $current_bid.prependTo('body')
     $current_bid.data 'current_bid', bid.value
-    $current_bid.text "current bid is: #{bid.value}"
+    $current_bid.text "current bid is: #{bid.value} by #{bid.user}"
     
 
   socketIoClient.on "disconnect", ->
