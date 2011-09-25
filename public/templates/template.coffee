@@ -1,2 +1,0 @@
-li  @data.msg
-
