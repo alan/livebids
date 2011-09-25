@@ -1,0 +1,79 @@
+body, p {
+	margin:0;
+	padding:0;
+	font-family: Arial Black, sans-serif;
+	}
+
+a:active {background-color:#F7931E;
+		border:solid 2px #000;	}
+
+	
+#active {font-size:14px;}
+
+#active p {
+	color:white;
+	width:50%;
+	margin-left:5%;
+	margin-top:-5px;
+	margin-bottom:5px;}	
+
+#container {
+	background-color:#009245;
+	}
+.clear {
+	clear:both;}
+
+.myButton {
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	background-color:#C1272D;
+	border-radius:5px;
+	border:1px solid #d83526;
+	display:inline-block;
+	color:#ffffff;
+	font-family:Arial Black;
+	font-size:15px;
+	font-weight:bold;
+	padding: 3% 1%;
+	text-decoration:none;
+	text-shadow:1px 0px 0px #98231a;
+	width:40%;
+	float:left;
+	font-size:12px
+	
+	}
+	
+.myButton span {padding-top:3px;}	
+
+#oauth {width:42%;
+		float:left;
+		margin-left:2%;
+		
+		text-align:center;}
+		
+#ormiddle {width:10%;
+			float:left;
+			color:white;
+			margin-top:2%;}		
+		
+ 		
+a.oauthbuttons {width:30%; margin:1%; float:left;
+	}
+	
+.oauthbuttons img {
+	padding:4px;
+	border:2px solid #FFF;
+	background-color:#e6e6e6;
+	height:28px;
+	width:28px;
+	vertical-align:middle;
+	}
+
+#static {
+	background-image:url(/img/landing2sml_opt.png);
+	background-repeat:no-repeat;
+	width:320px;
+	height:300px;
+	background-color:#009245;
+	}

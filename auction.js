@@ -198,7 +198,7 @@
           console.log("bid rejected");
           this.biddercast(bidder, "sorry, you've been out bid already");
           return this.bidderemit(bidder, "bidstatus", {
-            accepted: true
+            accepted: false
           });
         }
       }

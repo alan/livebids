@@ -32,7 +32,6 @@
     })();
     PageSetup = (function() {
       function PageSetup() {
-        $('body').prepend('<button class="bid fat-blue"> make bid </a>');
         $('button.bid').live('click', function() {
           var current_bid, nextbid;
           current_bid = $('#current_bid').data('current_bid');

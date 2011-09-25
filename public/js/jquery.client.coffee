@@ -27,7 +27,6 @@ $ ->
 
   class PageSetup
     constructor: ->
-      $('body').prepend('<button class="bid fat-blue"> make bid </a>')
       $('button.bid').live 'click', ->
         current_bid = $('#current_bid').data('current_bid')
         if current_bid?

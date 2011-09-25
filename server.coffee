@@ -39,7 +39,7 @@ assetsSettings =
     route: /\/static\/css\/[a-z0-9]+\/.*\.css/
     path: "./public/css/"
     dataType: "css"
-    files: [ "reset.css", "client.css" ]
+    files: [ "reset.css", "client.css", "charity.css" ]
     debug: true
     postManipulate: "^": [ assetHandler.fixVendorPrefixes, assetHandler.fixGradients, assetHandler.replaceImageRefToBase64(__dirname + "/public"), assetHandler.yuiCssOptimize ]
 
@@ -67,12 +67,12 @@ app.configure ->
   app.use authentication.middleware.normalizeUserData()
   app.use express["static"](__dirname + "/public", maxAge: 86400000)
   if siteConf.notifoAuth
-    app.use notifoMiddleware(siteConf.notifoAuth, 
+    app.use notifoMiddleware(siteConf.notifoAuth,
       filter: (req, res, callback) ->
         callback null, (not req.xhr and not (req.headers["x-real-ip"] or req.connection.remoteAddress).match(/192.168./))
-      
+
       format: (req, res, callback) ->
-        callback null, 
+        callback null,
           title: ":req[x-real-ip]/:remote-addr @ :req[host]"
           message: ":response-time ms - :date - :req[x-real-ip]/:remote-addr - :method :user-agent / :referrer"
     )
@@ -106,8 +106,11 @@ app.error (err, req, res, next) ->
 
 app.all "/", (req, res) ->
   req.session.uid = (0 | Math.random() * 1000000)  unless req.session.uid
-  res.locals key: "value"
-  res.render "index"
+  if req.session.user
+    res.locals key: "value"
+    res.render "index"
+  else
+    res.render "login"
 
 dummyHelpers = new DummyHelper(app)
 app.all "*", (req, res) ->
