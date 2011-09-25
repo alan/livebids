@@ -24,6 +24,12 @@ $ ->
       socketIoClient.on "adminbuttons", ->
         new AdminButtons()
 
+      socketIoClient.on "going", (data) ->
+        $("#status").find("p").text "#{data.left} seconds left"
+
+      socketIoClient.on "over", (data) ->
+        $("#status").find("p").text "Sold to #{data.name} for &pound; #{data.value}"
+
       socketIoClient.on "winner", (data) ->
         window.alert "You have won with a winning bid of £#{data.value} and will now be redirected to the JustGiving payment page"
         url = "http://www.justgiving.com/donation/direct/charity/2344?amount=#{data.value}&reference=livebidding-auction-name-#{data.auction_name}&frequency=single&exitUrl=http%3a%2f%2flivebids.herokuapp.com%2freturn?donationId=JUSTGIVING-DONATION-ID"
@@ -81,6 +87,8 @@ $ ->
       $currentbid.html "&pound; #{bid_data.value} Higest bid BY <img class=\"avatar\" src=\"#{bid_data.image}\"> #{bid_data.name}"
 
       ($ '.myBidButton').html "Bid &pound; #{bid_data.value + 1} Now"
+      ($ '#status').find("p").text "You are online and can bid."
+
 
   class JoinRoom
     constructor: (msg)->

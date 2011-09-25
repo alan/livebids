@@ -25,6 +25,12 @@
         socketIoClient.on("adminbuttons", function() {
           return new AdminButtons();
         });
+        socketIoClient.on("going", function(data) {
+          return $("#status").find("p").text("" + data.left + " seconds left");
+        });
+        socketIoClient.on("over", function(data) {
+          return $("#status").find("p").text("Sold to " + data.name + " for &pound; " + data.value);
+        });
         socketIoClient.on("winner", function(data) {
           var url;
           window.alert("You have won with a winning bid of £" + data.value + " and will now be redirected to the JustGiving payment page");
@@ -98,6 +104,7 @@
         $currentbid.data('currentbid', bid_data.value);
         $currentbid.html("&pound; " + bid_data.value + " Higest bid BY <img class=\"avatar\" src=\"" + bid_data.image + "\"> " + bid_data.name);
         ($('.myBidButton')).html("Bid &pound; " + (bid_data.value + 1) + " Now");
+        ($('#status')).find("p").text("You are online and can bid.");
       }
       return Bid;
     })();
