@@ -7,7 +7,7 @@ class Bidder extends EE
   @last_used_id = 0
   @collection = new Collection()
 
-  constructor: (user: @user, client: client, sid: @sid) ->
+  constructor: (user: @user, client: client, sid: @sid, image: @image) ->
     @id = @user
     @constructor.collection.add @
     @new_client(client)

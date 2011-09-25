@@ -17,7 +17,7 @@
     Bidder.collection = new Collection();
     function Bidder(_arg) {
       var client;
-      this.user = _arg.user, client = _arg.client, this.sid = _arg.sid;
+      this.user = _arg.user, client = _arg.client, this.sid = _arg.sid, this.image = _arg.image;
       this.id = this.user;
       this.constructor.collection.add(this);
       this.new_client(client);

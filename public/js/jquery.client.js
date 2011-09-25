@@ -45,7 +45,7 @@
           $current_bid.prependTo('body');
         }
         $current_bid.data('current_bid', bid_data.value);
-        $current_bid.text("current bid is: " + bid.value + " from " + bid.user);
+        $current_bid.html("<img class=\"avatar\" src=\"" + bid.image + "\"> current bid is: " + bid.value + " from " + bid.user);
       }
       return Bid;
     })();

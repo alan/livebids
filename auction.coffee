@@ -55,6 +55,7 @@ events =
       active: 'active'
     callback: (bid, bidder) ->
       bid.user = bidder.user
+      bid.image = bidder.image
       # auction logic
       console.log "auction #{@item} got bid #{bid.value} from #{bidder.user}"
       if !@current_bid?

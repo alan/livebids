@@ -56,8 +56,6 @@
     }
   };
   app.configure("development", function() {
-    assetsSettings.js.files.push("jquery.frontend-development.js");
-    assetsSettings.css.files.push("frontend-development.css");
     return [["js", "updatedContent"], ["css", "updatedCss"]].forEach(function(group) {
       var triggerUpdate;
       return assetsSettings[group[0]].postManipulate["^"].push(triggerUpdate = function(file, path, index, isLast, callback) {
