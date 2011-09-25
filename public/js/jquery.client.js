@@ -14,8 +14,15 @@
           return new Bid(bid);
         });
         socketIoClient.on("adminbuttons", function() {
-          console.log('got adminbuttons');
           return new AdminButtons();
+        });
+        socketIoClient.on("winner", function(data) {
+          var url;
+          window.alert("You have won with a winning bid of £" + data.value + " and will now be redirected to the JustGiving payment page");
+          url = "http://www.justgiving.com/donation/direct/charity/2344?amount=" + data.value + "&reference=livebidding-auction-name-" + data.auction_name + "&frequency=single&exitUrl=http%3a%2f%2flivebids.herokuapp.com%2freturn?donationId=JUSTGIVING-DONATION-ID";
+          return setTimeout(function() {
+            return window.location = url;
+          }, 2000);
         });
         socketIoClient.on("disconnect", function() {
           return $("#connected").removeClass("on").find("strong").text("Offline");

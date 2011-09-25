@@ -13,8 +13,14 @@ $ ->
         new Bid(bid)
 
       socketIoClient.on "adminbuttons", ->
-        console.log('got adminbuttons')
         new AdminButtons()
+
+      socketIoClient.on "winner", (data) ->
+        window.alert "You have won with a winning bid of £#{data.value} and will now be redirected to the JustGiving payment page"
+        url = "http://www.justgiving.com/donation/direct/charity/2344?amount=#{data.value}&reference=livebidding-auction-name-#{data.auction_name}&frequency=single&exitUrl=http%3a%2f%2flivebids.herokuapp.com%2freturn?donationId=JUSTGIVING-DONATION-ID"
+        setTimeout ->
+          window.location = url
+        , 2000
 
       socketIoClient.on "disconnect", ->
         $("#connected").removeClass("on").find("strong").text "Offline"

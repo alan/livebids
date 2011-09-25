@@ -121,7 +121,12 @@
       },
       callback: function() {
         this.broadcast("auction over. Sold!");
-        return this.broademit("over");
+        this.broademit("over");
+        this.biddercast(this.current_bidder, "You've won and it's now time to pay");
+        return this.bidderemit(this.current_bidder, "winner", {
+          value: this.current_bid.value,
+          auction_name: this.name
+        });
       }
     },
     restart_auction: {
@@ -137,6 +142,7 @@
         this.broadcast("auction restarted");
         this.broademit("restarted");
         this.bids = [];
+        this.current_bidder = null;
         this.current_bid = {
           value: 0,
           name: admin.name,
@@ -169,6 +175,7 @@
           console.log("first bid accepted " + bid.value + " from " + bidder.name);
           this.bids.push(bid);
           this.current_bid = bid;
+          this.current_bidder = bidder;
           this.broadcast("first bid from " + bidder.name);
           this.biddercast(bidder, "bid accepted");
           this.broademit("newbid", bid);
@@ -180,6 +187,7 @@
           console.log("bid accepted");
           this.bids.push(bid);
           this.current_bid = bid;
+          this.current_bidder = bidder;
           this.broadcast("new bid from " + bidder.name);
           this.biddercast(bidder, "bid accepted");
           this.broademit("newbid", bid);
@@ -203,6 +211,7 @@
       Auction.__super__.constructor.call(this, 'start', states, events);
       this.bidders = [];
       this.current_bid = null;
+      this.current_bidder = null;
       this.bids = [];
       this.name = "" + (Math.floor(Math.random() * 1000000000000));
       this.on('moved_state', __bind(function(state_name) {
@@ -288,20 +297,6 @@
           }, 2500);
         }, 2500);
       }, 2500);
-    };
-    (function(a) {
-      a.broadcast('going three times');
-      a.broademit('going', {
-        left: 1
-      });
-      return a.going = setTimeout(this.going4(a), 2500);
-    });
-    Auction.prototype.going4 = function(a) {
-      a.broadcast('Sold!');
-      a.broademit('going', {
-        left: 0
-      });
-      return a.trigger('auction_over');
     };
     return Auction;
   })();

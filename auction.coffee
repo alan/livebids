@@ -16,7 +16,6 @@ states =
   finished:
     full_name: 'End State'
 
-
 events =
   bidder_joined:
     transitions:
@@ -62,6 +61,8 @@ events =
     callback: () ->
       @broadcast "auction over. Sold!"
       @broademit "over"
+      @biddercast @current_bidder, "You've won and it's now time to pay"
+      @bidderemit @current_bidder, "winner", value: @current_bid.value, auction_name: @name
   restart_auction:
     transitions:
       start: 'active'
@@ -74,6 +75,7 @@ events =
       @broadcast "auction restarted"
       @broademit "restarted"
       @bids = []
+      @current_bidder = null
       @current_bid = { value: 0,  name: admin.name, image: admin.image }
       @broademit "newbid", @current_bid
   going_auction:
@@ -97,6 +99,7 @@ events =
 
         @bids.push bid
         @current_bid = bid
+        @current_bidder = bidder
         @broadcast "first bid from #{bidder.name}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
@@ -107,6 +110,7 @@ events =
 
         @bids.push bid
         @current_bid = bid
+        @current_bidder = bidder
         @broadcast "new bid from #{bidder.name}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
@@ -122,6 +126,7 @@ class Auction extends StateMachine
     super('start', states, events)
     @bidders = []
     @current_bid = null
+    @current_bidder = null
     @bids = []
     @name = "#{Math.floor(Math.random() * 1000000000000)}" #TODO make unique
 
@@ -169,17 +174,6 @@ class Auction extends StateMachine
          , 2500
        , 2500
      , 2500
-
-
-   (a) ->
-     a.broadcast 'going three times'
-     a.broademit 'going', left: 1
-     a.going = setTimeout @going4(a), 2500
-
-   going4: (a)->
-     a.broadcast 'Sold!'
-     a.broademit 'going', left: 0
-     a.trigger 'auction_over'
 
 
 
