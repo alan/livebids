@@ -11,6 +11,7 @@ class Bidder extends EE
     @constructor.collection.add @
     @new_client(client)
     @state = "logged_out"
+    global.io.sockets.in('/activity').emit('activity', what: 'newbidder', name: @name, image: @image)
 
     # unil we have workflow, join this bidder the live auction
     global.live_auction.trigger 'bidder_joined', @

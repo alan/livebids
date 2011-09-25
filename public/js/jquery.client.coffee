@@ -13,6 +13,7 @@ $ ->
           return
 
       socketIoClient.on "activity", (data) ->
+        console.log "activity", data
         new Activity(data)
 
       socketIoClient.on "message", (msg) ->
@@ -63,11 +64,13 @@ $ ->
 
   class Activity
     constructor: (data) ->
-      $html = $ """
-                <button class="going slick-black">Going</button>
-                <button class="restart slick-black">Restart</button>
-                <button class="stop slick-black">Stop</button>
-                """
+      if data.what == 'newbidder'
+        $html = $ """
+                  <div class="activity">
+                    <span>New Bidder: #{data.name}</span>
+                    <img src="#{data.image}"/>
+                  </div>
+                  """
       $('#activity').prepend $html
 
   class Bid

@@ -190,19 +190,39 @@ body {
 #nextbid {
   text-align: center;  }
 
+.top_logo {
+  background-image:url(/img/logosml_opt.png);
+  background-repeat:no-repeat;
+  width:320px;
+  height:37px;}    
+
+.logoutlink {
+  width: 15%;
+  font-size:15px;
+  font-family:Arial, Helvetica, sans-serif;
+  float:right;
+  margin-right:5%;
+  margin-top:3%;
+  text-align: center;}
+
+.logoutlink a {color:white;
+  text-decoration:none;}
+
 .myBidButton {
      -moz-border-radius:5px;
      -webkit-border-radius:5px;
      background-color:#006837;
      border-radius:5px;
-     border:1px solid #d83526;
-     display: inline-block;
+     border:1px solid #006837;
+     display:inline-block;
      color:#ffffff;
      font-family:Arial Black, sans-serif;
      padding: 3%;
      text-decoration:none;
-     text-shadow:1px 0px 0px #98231a;
      width:80%;
+     float:left;
      font-size:20px;
-     text-align:center;    }
+     text-align:center;
+     margin-left:7%
+     }
 
