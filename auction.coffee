@@ -118,7 +118,7 @@ events =
       else
         console.log "bid rejected"
         @biddercast bidder, "sorry, you've been out bid already"
-        @bidderemit bidder, "bidstatus", accepted: true
+        @bidderemit bidder, "bidstatus", accepted: false
 
 
 class Auction extends StateMachine
