@@ -32,9 +32,34 @@
         if (global.live_auction != null) {
           return global.live_auction.trigger('bid', data, this);
         } else {
-          return console.log("no global live_auction to tribber bid to");
+          return console.log("no global live_auction to trigger bid to");
         }
       }, this));
+      if (this.name === 'bids live') {
+        console.log("admin actions for new connected client");
+        this.emit('adminbuttons');
+        new_client.on('stop_auction', __bind(function() {
+          if (global.live_auction != null) {
+            return global.live_auction.trigger('stop_auction', this);
+          } else {
+            return console.log("no global live_auction to trigger stop to");
+          }
+        }, this));
+        new_client.on('going_auction', __bind(function() {
+          if (global.live_auction != null) {
+            return global.live_auction.trigger('going_auction', this);
+          } else {
+            return console.log("no global live_auction to trigger stop to");
+          }
+        }, this));
+        new_client.on('restart_auction', __bind(function() {
+          if (global.live_auction != null) {
+            return global.live_auction.trigger('restart_auction', this);
+          } else {
+            return console.log("no global live_auction to trigger stop to");
+          }
+        }, this));
+      }
       this.emit('state', {
         state: this.state
       });
@@ -50,6 +75,9 @@
     };
     Bidder.prototype.emit = function(name, args) {
       return global.io.sockets["in"](this.sid).emit(name, args);
+    };
+    Bidder.prototype.send = function(message) {
+      return global.io.sockets["in"](this.sid).send(message);
     };
     return Bidder;
   })();

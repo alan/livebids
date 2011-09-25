@@ -12,11 +12,16 @@ $ ->
       socketIoClient.on "newbid", (bid) ->
         new Bid(bid)
 
+      socketIoClient.on "adminbuttons", ->
+        console.log('got adminbuttons')
+        new AdminButtons()
+
       socketIoClient.on "disconnect", ->
         $("#connected").removeClass("on").find("strong").text "Offline"
 
   class PageSetup
     constructor: ->
+      $('body').prepend('<button class="bid fat-blue"> make bid </a>')
       $('button.bid').live 'click', ->
         current_bid = $('#current_bid').data('current_bid')
         if current_bid?
@@ -24,6 +29,18 @@ $ ->
         else
           nextbid = 1
         socketIoClient.emit 'bid', value: nextbid
+
+  class AdminButtons
+    constructor: ->
+      $('button.going').live 'click', -> socketIoClient.emit 'going_auction'
+      $('button.restart').live 'click', -> socketIoClient.emit 'restart_auction'
+      $('button.stop').live 'click', -> socketIoClient.emit 'stop_auction'
+      $html = $ """
+                <button class="going slick-black">Going</button>
+                <button class="restart slick-black">Restart</button>
+                <button class="stop slick-black">Stop</button>
+                """
+      $('body').prepend $html
 
   class Bid
     constructor: (bid_data) ->

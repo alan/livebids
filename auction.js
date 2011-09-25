@@ -17,7 +17,7 @@
     active: {
       full_name: 'Auction happening now!'
     },
-    completed: {
+    complete: {
       full_name: 'Auction Finished'
     },
     payment_pending: {
@@ -35,7 +35,7 @@
       transitions: {
         start: 'start',
         active: 'active',
-        completed: 'completed',
+        complete: 'complete',
         payment_pending: 'payment_pending',
         payment_collected: 'payment_collected'
       },
@@ -63,7 +63,7 @@
       transitions: {
         start: 'start',
         active: 'active',
-        completed: 'completed',
+        complete: 'complete',
         payment_pending: 'payment_pending',
         payment_collected: 'payment_collected'
       },
@@ -106,11 +106,62 @@
         return this.broademit("started");
       }
     },
+    stop_auction: {
+      transitions: {
+        active: 'complete'
+      },
+      callback: function(admin) {
+        this.broadcast("auction stopped");
+        return this.broademit("stopped");
+      }
+    },
+    auction_over: {
+      transitions: {
+        active: 'complete'
+      },
+      callback: function() {
+        this.broadcast("auction over. Sold!");
+        return this.broademit("over");
+      }
+    },
+    restart_auction: {
+      transitions: {
+        start: 'active',
+        active: 'active',
+        complete: 'active',
+        payment_pending: 'active',
+        payment_collected: 'active',
+        active: 'active'
+      },
+      callback: function(admin) {
+        this.broadcast("auction restarted");
+        this.broademit("restarted");
+        this.bids = [];
+        this.current_bid = {
+          value: 0,
+          name: admin.name,
+          image: admin.image
+        };
+        return this.broademit("newbid", this.current_bid);
+      }
+    },
+    going_auction: {
+      transitions: {
+        active: 'active'
+      },
+      callback: function(admin) {
+        return this.going1();
+      }
+    },
     bid: {
       transitions: {
         active: 'active'
       },
       callback: function(bid, bidder) {
+        if (this.going != null) {
+          clearTimeout(this.going);
+          this.going = null;
+        }
         bid.name = bidder.name;
         bid.image = bidder.image;
         console.log("auction " + this.item + " got bid " + bid.value + " from " + bidder.name);
@@ -118,7 +169,7 @@
           console.log("first bid accepted " + bid.value + " from " + bidder.name);
           this.bids.push(bid);
           this.current_bid = bid;
-          this.broadcast("first bid from " + bidder.id);
+          this.broadcast("first bid from " + bidder.name);
           this.biddercast(bidder, "bid accepted");
           this.broademit("newbid", bid);
           this.bidderemit(bidder, "bidstatus", {
@@ -129,7 +180,7 @@
           console.log("bid accepted");
           this.bids.push(bid);
           this.current_bid = bid;
-          this.broadcast("new bid from " + bidder.id);
+          this.broadcast("new bid from " + bidder.name);
           this.biddercast(bidder, "bid accepted");
           this.broademit("newbid", bid);
           return this.bidderemit(bidder, "bidstatus", {
@@ -176,9 +227,10 @@
     };
     Auction.prototype.biddercast = function(b, message) {
       console.log("auction " + this.item + " biddercast: " + b.name + " " + message);
-      return b.emit("broadcast", {
+      b.emit("broadcast", {
         message: message
       });
+      return b.send(message);
     };
     Auction.prototype.broademit = function() {
       var args, b, event, _i, _len, _ref, _results;
@@ -193,17 +245,63 @@
       return _results;
     };
     Auction.prototype.broadcast = function(message) {
-      var b, _i, _len, _ref, _results;
+      var b, _i, _j, _len, _len2, _ref, _ref2, _results;
       console.log("auction " + this.item + " broadcast: " + message);
       _ref = this.bidders;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         b = _ref[_i];
-        _results.push(b.emit("broadcast", {
+        b.emit("broadcast", {
           message: message
-        }));
+        });
+      }
+      _ref2 = this.bidders;
+      _results = [];
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        b = _ref2[_j];
+        _results.push(b.send(message));
       }
       return _results;
+    };
+    Auction.prototype.going1 = function() {
+      var a;
+      this.broadcast('going once');
+      this.broademit('going', {
+        left: 3
+      });
+      a = this;
+      return this.going = setTimeout(function() {
+        a.broadcast('going twice');
+        a.broademit('going', {
+          left: 2
+        });
+        return a.going = setTimeout(function() {
+          a.broadcast('going three times');
+          a.broademit('going', {
+            left: 1
+          });
+          return a.going = setTimeout(function() {
+            a.broadcast('Sold!');
+            a.broademit('going', {
+              left: 0
+            });
+            return a.trigger('auction_over');
+          }, 2500);
+        }, 2500);
+      }, 2500);
+    };
+    (function(a) {
+      a.broadcast('going three times');
+      a.broademit('going', {
+        left: 1
+      });
+      return a.going = setTimeout(this.going4(a), 2500);
+    });
+    Auction.prototype.going4 = function(a) {
+      a.broadcast('Sold!');
+      a.broademit('going', {
+        left: 0
+      });
+      return a.trigger('auction_over');
     };
     return Auction;
   })();

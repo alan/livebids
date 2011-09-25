@@ -7,7 +7,7 @@ states =
     full_name: 'Waiting for Bidders'
   active:
     full_name: 'Auction happening now!'
-  completed:
+  complete:
     full_name: 'Auction Finished'
   payment_pending:
     full_name: 'Waiting for Payment'
@@ -22,7 +22,7 @@ events =
     transitions:
       start: 'start'
       active: 'active'
-      completed: 'completed'
+      complete: 'complete'
       payment_pending: 'payment_pending'
       payment_collected: 'payment_collected'
     callback: (bidder) ->
@@ -36,7 +36,7 @@ events =
     transitions:
       start: 'start'
       active: 'active'
-      completed: 'completed'
+      complete: 'complete'
       payment_pending: 'payment_pending'
       payment_collected: 'payment_collected'
     callback: (bidder) ->
@@ -50,10 +50,44 @@ events =
     callback: () ->
       @broadcast "auction started "
       @broademit "started"
+  stop_auction:
+    transitions:
+      active: 'complete'
+    callback: (admin) ->
+      @broadcast "auction stopped"
+      @broademit "stopped"
+  auction_over:
+    transitions:
+      active: 'complete'
+    callback: () ->
+      @broadcast "auction over. Sold!"
+      @broademit "over"
+  restart_auction:
+    transitions:
+      start: 'active'
+      active: 'active'
+      complete: 'active'
+      payment_pending: 'active'
+      payment_collected: 'active'
+      active: 'active'
+    callback: (admin) ->
+      @broadcast "auction restarted"
+      @broademit "restarted"
+      @bids = []
+      @current_bid = { value: 0,  name: admin.name, image: admin.image }
+      @broademit "newbid", @current_bid
+  going_auction:
+    transitions:
+      active: 'active'
+    callback: (admin) ->
+      @going1()
   bid:
     transitions:
       active: 'active'
     callback: (bid, bidder) ->
+      if @going?
+        clearTimeout @going
+        @going = null
       bid.name = bidder.name
       bid.image = bidder.image
       # auction logic
@@ -63,7 +97,7 @@ events =
 
         @bids.push bid
         @current_bid = bid
-        @broadcast "first bid from #{bidder.id}"
+        @broadcast "first bid from #{bidder.name}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
         @bidderemit bidder, "bidstatus", accepted: true
@@ -73,7 +107,7 @@ events =
 
         @bids.push bid
         @current_bid = bid
-        @broadcast "new bid from #{bidder.id}"
+        @broadcast "new bid from #{bidder.name}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
         @bidderemit bidder, "bidstatus", accepted: true
@@ -107,6 +141,7 @@ class Auction extends StateMachine
    biddercast: (b, message) ->
      console.log "auction #{@item} biddercast: #{b.name} #{message}"
      b.emit("broadcast", message: message)
+     b.send(message)
 
    broademit: (event, args...) ->
      console.log "auction #{@item} broademit: #{event}", args...
@@ -115,6 +150,38 @@ class Auction extends StateMachine
    broadcast: (message) ->
      console.log "auction #{@item} broadcast: #{message}"
      b.emit("broadcast", message: message) for b in @bidders
+     b.send(message) for b in @bidders
+
+   going1: ->
+     @broadcast 'going once'
+     @broademit 'going', left: 3
+     a = @
+     @going = setTimeout ->
+       a.broadcast 'going twice'
+       a.broademit 'going', left: 2
+       a.going = setTimeout  ->
+         a.broadcast 'going three times'
+         a.broademit 'going', left: 1
+         a.going = setTimeout ->
+            a.broadcast 'Sold!'
+            a.broademit 'going', left: 0
+            a.trigger 'auction_over'
+         , 2500
+       , 2500
+     , 2500
+
+
+   (a) ->
+     a.broadcast 'going three times'
+     a.broademit 'going', left: 1
+     a.going = setTimeout @going4(a), 2500
+
+   going4: (a)->
+     a.broadcast 'Sold!'
+     a.broademit 'going', left: 0
+     a.trigger 'auction_over'
+
+
 
 # create an auction
 auction = new Auction({ item: 'Mars Bar', description: 'chocolate bar'})

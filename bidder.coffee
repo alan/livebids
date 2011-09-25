@@ -25,7 +25,29 @@ class Bidder extends EE
       if global.live_auction?
         global.live_auction.trigger 'bid', data, @
       else
-        console.log "no global live_auction to tribber bid to"
+        console.log "no global live_auction to trigger bid to"
+
+     if @name == 'bids live'
+       console.log "admin actions for new connected client"
+       @emit 'adminbuttons'
+       new_client.on 'stop_auction', () =>
+         if global.live_auction?
+           global.live_auction.trigger 'stop_auction', @
+         else
+           console.log "no global live_auction to trigger stop to"
+
+       new_client.on 'going_auction', () =>
+         if global.live_auction?
+           global.live_auction.trigger 'going_auction', @
+         else
+           console.log "no global live_auction to trigger stop to"
+
+       new_client.on 'restart_auction', () =>
+         if global.live_auction?
+           global.live_auction.trigger 'restart_auction', @
+         else
+           console.log "no global live_auction to trigger stop to"
+
 
     @emit 'state', state: @state
 
@@ -41,6 +63,9 @@ class Bidder extends EE
   # wrapper function to emit to the sid room
   emit: (name, args) ->
     global.io.sockets.in(@sid).emit(name, args)
+
+  send: (message) ->
+    global.io.sockets.in(@sid).send(message)
 
 (exports ? window).Bidder = Bidder
 

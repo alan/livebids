@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var Bid, JoinRoom, PageSetup, SocketIO;
+    var AdminButtons, Bid, JoinRoom, PageSetup, SocketIO;
     SocketIO = (function() {
       function SocketIO() {
         window.socketIoClient = io.connect();
@@ -13,6 +13,10 @@
         socketIoClient.on("newbid", function(bid) {
           return new Bid(bid);
         });
+        socketIoClient.on("adminbuttons", function() {
+          console.log('got adminbuttons');
+          return new AdminButtons();
+        });
         socketIoClient.on("disconnect", function() {
           return $("#connected").removeClass("on").find("strong").text("Offline");
         });
@@ -21,6 +25,7 @@
     })();
     PageSetup = (function() {
       function PageSetup() {
+        $('body').prepend('<button class="bid fat-blue"> make bid </a>');
         $('button.bid').live('click', function() {
           var current_bid, nextbid;
           current_bid = $('#current_bid').data('current_bid');
@@ -35,6 +40,23 @@
         });
       }
       return PageSetup;
+    })();
+    AdminButtons = (function() {
+      function AdminButtons() {
+        var $html;
+        $('button.going').live('click', function() {
+          return socketIoClient.emit('going_auction');
+        });
+        $('button.restart').live('click', function() {
+          return socketIoClient.emit('restart_auction');
+        });
+        $('button.stop').live('click', function() {
+          return socketIoClient.emit('stop_auction');
+        });
+        $html = $("<button class=\"going slick-black\">Going</button>\n<button class=\"restart slick-black\">Restart</button>\n<button class=\"stop slick-black\">Stop</button>");
+        $('body').prepend($html);
+      }
+      return AdminButtons;
     })();
     Bid = (function() {
       function Bid(bid_data) {
