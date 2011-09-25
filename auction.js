@@ -43,7 +43,7 @@
         var p;
         this.bidders.push(bidder);
         this.bidderemit(bidder, 'startup');
-        this.broadcast("new bidder! " + bidder.user);
+        this.broadcast("new bidder! " + bidder.name);
         this.broademit("bidder_joined", {
           bidders: (function() {
             var _i, _len, _ref, _results;
@@ -81,7 +81,7 @@
           }
           return _results;
         }).call(this);
-        this.broadcast("bidder left! " + bidder.user);
+        this.broadcast("bidder left! " + bidder.name);
         this.broademit("bidder_left", {
           bidders: (function() {
             var _i, _len, _ref, _results;
@@ -111,11 +111,11 @@
         active: 'active'
       },
       callback: function(bid, bidder) {
-        bid.user = bidder.user;
+        bid.name = bidder.name;
         bid.image = bidder.image;
-        console.log("auction " + this.item + " got bid " + bid.value + " from " + bidder.user);
+        console.log("auction " + this.item + " got bid " + bid.value + " from " + bidder.name);
         if (!(this.current_bid != null)) {
-          console.log("first bid accepted " + bid.value + " from " + bidder.user);
+          console.log("first bid accepted " + bid.value + " from " + bidder.name);
           this.bids.push(bid);
           this.current_bid = bid;
           this.broadcast("first bid from " + bidder.id);
@@ -171,11 +171,11 @@
     Auction.prototype.bidderemit = function() {
       var args, b, event;
       b = arguments[0], event = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
-      console.log.apply(console, ["auction " + this.item + " bidderemit: " + b.user + " " + event].concat(__slice.call(args)));
+      console.log.apply(console, ["auction " + this.item + " bidderemit: " + b.name + " " + event].concat(__slice.call(args)));
       return b.emit.apply(b, [event].concat(__slice.call(args)));
     };
     Auction.prototype.biddercast = function(b, message) {
-      console.log("auction " + this.item + " biddercast: " + b.user + " " + message);
+      console.log("auction " + this.item + " biddercast: " + b.name + " " + message);
       return b.emit("broadcast", {
         message: message
       });

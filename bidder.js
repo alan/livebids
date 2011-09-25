@@ -17,8 +17,7 @@
     Bidder.collection = new Collection();
     function Bidder(_arg) {
       var client;
-      this.user = _arg.user, client = _arg.client, this.sid = _arg.sid, this.image = _arg.image;
-      this.id = this.user;
+      this.name = _arg.name, client = _arg.client, this.sid = _arg.sid, this.image = _arg.image;
       this.constructor.collection.add(this);
       this.new_client(client);
       this.state = "logged_out";
@@ -26,10 +25,10 @@
     }
     Bidder.prototype.new_client = function(new_client) {
       new_client.on('trigger', __bind(function(data) {
-        return console.log("got " + this.user + ":" + new_client.id + " trigger: ", data);
+        return console.log("got " + this.name + ":" + new_client.id + " trigger: ", data);
       }, this));
       return new_client.on('bid', __bind(function(data) {
-        console.log("got bid " + this.user + ":" + new_client.id + " bid: ", data);
+        console.log("got bid " + this.name + ":" + new_client.id + " bid: ", data);
         if (global.live_auction != null) {
           return global.live_auction.trigger('bid', data, this);
         } else {

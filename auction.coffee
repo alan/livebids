@@ -29,7 +29,7 @@ events =
       # todo , regisiter a 'disconnect' handler?
       @bidders.push bidder
       @bidderemit bidder, 'startup'
-      @broadcast "new bidder! #{bidder.user}"
+      @broadcast "new bidder! #{bidder.name}"
       @broademit "bidder_joined", bidders: (p.id for p in @bidders)
       true
   bidder_left:
@@ -41,7 +41,7 @@ events =
       payment_collected: 'payment_collected'
     callback: (bidder) ->
       @bidders = (p for p in @bidders when p != bidder)
-      @broadcast "bidder left! #{bidder.user}"
+      @broadcast "bidder left! #{bidder.name}"
       @broademit "bidder_left", bidders: (p.id for p in @bidders)
       true
   start_auction:
@@ -54,12 +54,12 @@ events =
     transitions:
       active: 'active'
     callback: (bid, bidder) ->
-      bid.user = bidder.user
+      bid.name = bidder.name
       bid.image = bidder.image
       # auction logic
-      console.log "auction #{@item} got bid #{bid.value} from #{bidder.user}"
+      console.log "auction #{@item} got bid #{bid.value} from #{bidder.name}"
       if !@current_bid?
-        console.log "first bid accepted #{bid.value} from #{bidder.user}"
+        console.log "first bid accepted #{bid.value} from #{bidder.name}"
 
         @bids.push bid
         @current_bid = bid
@@ -101,11 +101,11 @@ class Auction extends StateMachine
       Auction.finished_collection.remove @id
 
    bidderemit: (b, event, args...) ->
-     console.log "auction #{@item} bidderemit: #{b.user} #{event}", args...
+     console.log "auction #{@item} bidderemit: #{b.name} #{event}", args...
      b.emit(event, args...)
 
    biddercast: (b, message) ->
-     console.log "auction #{@item} biddercast: #{b.user} #{message}"
+     console.log "auction #{@item} biddercast: #{b.name} #{message}"
      b.emit("broadcast", message: message)
 
    broademit: (event, args...) ->

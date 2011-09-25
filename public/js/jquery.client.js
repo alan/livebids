@@ -42,10 +42,10 @@
         $current_bid = $('#current_bid');
         if (!($current_bid[0] != null)) {
           $current_bid = $('<div id="current_bid"/>');
-          $current_bid.prependTo('body');
+          $current_bid.appendTo('body');
         }
         $current_bid.data('current_bid', bid_data.value);
-        $current_bid.html("<img class=\"avatar\" src=\"" + bid.image + "\"> current bid is: " + bid.value + " from " + bid.user);
+        $current_bid.html("<img class=\"avatar\" src=\"" + bid_data.image + "\"> <span>current bid is: " + bid_data.value + " from " + bid_data.name + "</span>");
       }
       return Bid;
     })();

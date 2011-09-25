@@ -149,6 +149,7 @@ strong {
 #current_bid {
   border: 1px solid #666666;
   margin: 2px;
+  margin-top: 130px;
   padding: 3px;
   background: #EEE;
   color: #000; }

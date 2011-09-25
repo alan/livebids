@@ -7,8 +7,7 @@ class Bidder extends EE
   @last_used_id = 0
   @collection = new Collection()
 
-  constructor: (user: @user, client: client, sid: @sid, image: @image) ->
-    @id = @user
+  constructor: (name: @name, client: client, sid: @sid, image: @image) ->
     @constructor.collection.add @
     @new_client(client)
     @state = "logged_out"
@@ -19,10 +18,10 @@ class Bidder extends EE
   new_client: (new_client) ->
     # set up bindings required....
     new_client.on 'trigger', (data) =>
-      console.log "got #{@user}:#{new_client.id} trigger: ", data
+      console.log "got #{@name}:#{new_client.id} trigger: ", data
 
     new_client.on 'bid', (data) =>
-      console.log "got bid #{@user}:#{new_client.id} bid: ", data
+      console.log "got bid #{@name}:#{new_client.id} bid: ", data
       if global.live_auction?
         global.live_auction.trigger 'bid', data, @
       else
