@@ -21,6 +21,11 @@
       this.constructor.collection.add(this);
       this.new_client(client);
       this.state = "logged_out";
+      global.io.sockets["in"]('/activity').emit('activity', {
+        what: 'newbidder',
+        name: this.name,
+        image: this.image
+      });
       global.live_auction.trigger('bidder_joined', this);
     }
     Bidder.prototype.new_client = function(new_client) {

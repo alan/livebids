@@ -14,6 +14,7 @@
           }
         });
         socketIoClient.on("activity", function(data) {
+          console.log("activity", data);
           return new Activity(data);
         });
         socketIoClient.on("message", function(msg) {
@@ -88,7 +89,9 @@
     Activity = (function() {
       function Activity(data) {
         var $html;
-        $html = $("<button class=\"going slick-black\">Going</button>\n<button class=\"restart slick-black\">Restart</button>\n<button class=\"stop slick-black\">Stop</button>");
+        if (data.what === 'newbidder') {
+          $html = $("<div class=\"activity\">\n  <span>New Bidder: " + data.name + "</span>\n  <img src=\"" + data.image + "\"/>\n</div>");
+        }
         $('#activity').prepend($html);
       }
       return Activity;

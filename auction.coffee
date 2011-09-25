@@ -60,9 +60,10 @@ events =
       active: 'complete'
     callback: () ->
       @broadcast "auction over. Sold!"
-      @broademit "over"
-      @biddercast @current_bidder, "You've won and it's now time to pay"
-      @bidderemit @current_bidder, "winner", value: @current_bid.value, auction_name: @name
+      @broademit "over", name: @current_bid.name, value: @current_bid.value
+      if @current_bidder?
+        @biddercast @current_bidder, "You've won and it's now time to pay"
+        @bidderemit @current_bidder, "winner", value: @current_bid.value, auction_name: @name
   restart_auction:
     transitions:
       start: 'active'
