@@ -1,6 +1,6 @@
 (function() {
   $(function() {
-    var JoinRoom, PageSetup, SocketIO;
+    var Bid, JoinRoom, PageSetup, SocketIO;
     SocketIO = (function() {
       function SocketIO() {
         window.socketIoClient = io.connect(null, {
@@ -15,14 +15,7 @@
           return new JoinRoom(msg);
         });
         socketIoClient.on("newbid", function(bid) {
-          var $current_bid;
-          $current_bid = $('#current_bid');
-          if (!($current_bid[0] != null)) {
-            $current_bid = $('<div id="current_bid"/>');
-            $current_bid.prependTo('body');
-          }
-          $current_bid.data('current_bid', bid.value);
-          return $current_bid.text("current bid is: " + bid.value);
+          return new Bid(bid);
         });
         socketIoClient.on("disconnect", function() {
           return $("#connected").removeClass("on").find("strong").text("Offline");
@@ -46,6 +39,19 @@
         });
       }
       return PageSetup;
+    })();
+    Bid = (function() {
+      function Bid(bid_data) {
+        var $current_bid;
+        $current_bid = $('#current_bid');
+        if (!($current_bid[0] != null)) {
+          $current_bid = $('<div id="current_bid"/>');
+          $current_bid.prependTo('body');
+        }
+        $current_bid.data('current_bid', bid_data.value);
+        $current_bid.text("current bid is: " + bid_data.value);
+      }
+      return Bid;
     })();
     JoinRoom = (function() {
       function JoinRoom(msg) {
