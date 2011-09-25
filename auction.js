@@ -121,12 +121,17 @@
       },
       callback: function() {
         this.broadcast("auction over. Sold!");
-        this.broademit("over");
-        this.biddercast(this.current_bidder, "You've won and it's now time to pay");
-        return this.bidderemit(this.current_bidder, "winner", {
-          value: this.current_bid.value,
-          auction_name: this.name
+        this.broademit("over", {
+          name: this.current_bid.name,
+          value: this.current_bid.value
         });
+        if (this.current_bidder != null) {
+          this.biddercast(this.current_bidder, "You've won and it's now time to pay");
+          return this.bidderemit(this.current_bidder, "winner", {
+            value: this.current_bid.value,
+            auction_name: this.name
+          });
+        }
       }
     },
     restart_auction: {
