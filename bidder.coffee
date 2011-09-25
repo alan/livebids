@@ -27,26 +27,30 @@ class Bidder extends EE
       else
         console.log "no global live_auction to trigger bid to"
 
-     if @name == 'bids live'
-       console.log "admin actions for new connected client"
-       @emit 'adminbuttons'
-       new_client.on 'stop_auction', () =>
-         if global.live_auction?
-           global.live_auction.trigger 'stop_auction', @
-         else
-           console.log "no global live_auction to trigger stop to"
+    new_client.on 'activityview',  =>
+      new_client.leave('/' + @sid)
+      new_client.join('activity')
 
-       new_client.on 'going_auction', () =>
-         if global.live_auction?
-           global.live_auction.trigger 'going_auction', @
-         else
-           console.log "no global live_auction to trigger stop to"
+    if @name == 'bids live'
+      console.log "admin actions for new connected client"
+      @emit 'adminbuttons'
+      new_client.on 'stop_auction', () =>
+        if global.live_auction?
+          global.live_auction.trigger 'stop_auction', @
+        else
+          console.log "no global live_auction to trigger stop to"
 
-       new_client.on 'restart_auction', () =>
-         if global.live_auction?
-           global.live_auction.trigger 'restart_auction', @
-         else
-           console.log "no global live_auction to trigger stop to"
+      new_client.on 'going_auction', () =>
+        if global.live_auction?
+          global.live_auction.trigger 'going_auction', @
+        else
+          console.log "no global live_auction to trigger stop to"
+
+      new_client.on 'restart_auction', () =>
+        if global.live_auction?
+          global.live_auction.trigger 'restart_auction', @
+        else
+          console.log "no global live_auction to trigger stop to"
 
 
     @emit 'state', state: @state

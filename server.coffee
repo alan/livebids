@@ -109,6 +109,12 @@ app.all "/", (req, res) ->
   res.locals key: "value"
   res.render "index"
 
+app.all "/view", (req, res) ->
+  res.render "view"
+
+app.all "/return", (req, res) ->
+  res.render "return"
+
 dummyHelpers = new DummyHelper(app)
 app.all "*", (req, res) ->
   throw new NotFound

@@ -1,11 +1,20 @@
 (function() {
   $(function() {
-    var AdminButtons, Bid, JoinRoom, PageSetup, SocketIO;
+    var Activity, AdminButtons, Bid, JoinRoom, PageSetup, SocketIO;
     SocketIO = (function() {
       function SocketIO() {
         window.socketIoClient = io.connect();
         socketIoClient.on("connect", function() {
-          return $("#connected").addClass("on").find("strong").text("Online");
+          var $activity;
+          $("#connected").addClass("on").find("strong").text("Online");
+          $activity = $('#activity');
+          if ($activity.length !== 0) {
+            $('#activity').empty();
+            socketIoClient.emit("activityview");
+          }
+        });
+        socketIoClient.on("activity", function(data) {
+          return new Activity(data);
         });
         socketIoClient.on("message", function(msg) {
           return new JoinRoom(msg);
@@ -64,6 +73,14 @@
         $('body').prepend($html);
       }
       return AdminButtons;
+    })();
+    Activity = (function() {
+      function Activity(data) {
+        var $html;
+        $html = $("<button class=\"going slick-black\">Going</button>\n<button class=\"restart slick-black\">Restart</button>\n<button class=\"stop slick-black\">Stop</button>");
+        $('#activity').prepend($html);
+      }
+      return Activity;
     })();
     Bid = (function() {
       function Bid(bid_data) {

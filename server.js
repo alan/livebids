@@ -146,6 +146,12 @@
     });
     return res.render("index");
   });
+  app.all("/view", function(req, res) {
+    return res.render("view");
+  });
+  app.all("/return", function(req, res) {
+    return res.render("return");
+  });
   dummyHelpers = new DummyHelper(app);
   app.all("*", function(req, res) {
     throw new NotFound;

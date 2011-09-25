@@ -154,3 +154,7 @@ strong {
   background: #EEE;
   color: #000; }
 
+#activity {
+  color: #FFF;
+  float: left;
+  width: 100%; }

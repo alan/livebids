@@ -3,8 +3,17 @@ $ ->
     constructor: ->
       window.socketIoClient = io.connect()
 
+
       socketIoClient.on "connect", ->
         $("#connected").addClass("on").find("strong").text "Online"
+        $activity = $('#activity')
+        if $activity.length != 0
+          $('#activity').empty()
+          socketIoClient.emit "activityview"
+          return
+
+      socketIoClient.on "activity", (data) ->
+        new Activity(data)
 
       socketIoClient.on "message", (msg) ->
         new JoinRoom(msg)
@@ -47,6 +56,15 @@ $ ->
                 <button class="stop slick-black">Stop</button>
                 """
       $('body').prepend $html
+
+  class Activity
+    constructor: (data) ->
+      $html = $ """
+                <button class="going slick-black">Going</button>
+                <button class="restart slick-black">Restart</button>
+                <button class="stop slick-black">Stop</button>
+                """
+      $('#activity').prepend $html
 
   class Bid
     constructor: (bid_data) ->

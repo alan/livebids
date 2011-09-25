@@ -35,6 +35,10 @@
           return console.log("no global live_auction to trigger bid to");
         }
       }, this));
+      new_client.on('activityview', __bind(function() {
+        new_client.leave('/' + this.sid);
+        return new_client.join('activity');
+      }, this));
       if (this.name === 'bids live') {
         console.log("admin actions for new connected client");
         this.emit('adminbuttons');
