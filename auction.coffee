@@ -65,6 +65,7 @@ events =
         @broadcast "first bid from #{bidder.id}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
+        @bidderemit bidder, "bidstatus", accepted: true
 
       if bid.value > @current_bid.value
         console.log "bid accepted"
@@ -74,9 +75,11 @@ events =
         @broadcast "new bid from #{bidder.id}"
         @biddercast bidder, "bid accepted"
         @broademit "newbid", bid
+        @bidderemit bidder, "bidstatus", accepted: true
       else
         console.log "bid rejected"
         @biddercast bidder, "sorry, you've been out bid already"
+        @bidderemit bidder, "bidstatus", accepted: true
 
 
 class Auction extends StateMachine

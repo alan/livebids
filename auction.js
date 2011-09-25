@@ -120,6 +120,9 @@
           this.broadcast("first bid from " + bidder.id);
           this.biddercast(bidder, "bid accepted");
           this.broademit("newbid", bid);
+          this.bidderemit(bidder, "bidstatus", {
+            accepted: true
+          });
         }
         if (bid.value > this.current_bid.value) {
           console.log("bid accepted");
@@ -127,10 +130,16 @@
           this.current_bid = bid;
           this.broadcast("new bid from " + bidder.id);
           this.biddercast(bidder, "bid accepted");
-          return this.broademit("newbid", bid);
+          this.broademit("newbid", bid);
+          return this.bidderemit(bidder, "bidstatus", {
+            accepted: true
+          });
         } else {
           console.log("bid rejected");
-          return this.biddercast(bidder, "sorry, you've been out bid already");
+          this.biddercast(bidder, "sorry, you've been out bid already");
+          return this.bidderemit(bidder, "bidstatus", {
+            accepted: true
+          });
         }
       }
     }
