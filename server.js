@@ -48,7 +48,7 @@
       route: /\/static\/css\/[a-z0-9]+\/.*\.css/,
       path: "./public/css/",
       dataType: "css",
-      files: ["reset.css", "client.css"],
+      files: ["reset.css", "client.css", "charity.css"],
       debug: true,
       postManipulate: {
         "^": [assetHandler.fixVendorPrefixes, assetHandler.fixGradients, assetHandler.replaceImageRefToBase64(__dirname + "/public"), assetHandler.yuiCssOptimize]
@@ -141,10 +141,14 @@
     if (!req.session.uid) {
       req.session.uid = 0 | Math.random() * 1000000;
     }
-    res.locals({
-      key: "value"
-    });
-    return res.render("index");
+    if (req.session.user) {
+      res.locals({
+        key: "value"
+      });
+      return res.render("index");
+    } else {
+      return res.render("login");
+    }
   });
   app.all("/view", function(req, res) {
     return res.render("view");

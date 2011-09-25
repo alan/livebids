@@ -41,7 +41,6 @@
     })();
     PageSetup = (function() {
       function PageSetup() {
-        $('body').prepend('<button class="bid fat-blue"> make bid </a>');
         $('button.bid').live('click', function() {
           var current_bid, nextbid;
           current_bid = $('#current_bid').data('current_bid');
@@ -53,6 +52,10 @@
           return socketIoClient.emit('bid', {
             value: nextbid
           });
+        });
+        ($('#facebook_button, #google_button, #create_account')).click(function(e) {
+          e.preventDefault();
+          return alert('Please use twitter');
         });
       }
       return PageSetup;
