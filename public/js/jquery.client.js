@@ -44,13 +44,14 @@
     PageSetup = (function() {
       function PageSetup() {
         $('button.bid').live('click', function() {
-          var current_bid, nextbid;
-          current_bid = $('#current_bid').data('current_bid');
-          if (current_bid != null) {
-            nextbid = current_bid + 1;
+          var currentbid, nextbid;
+          currentbid = $('#currentbid').data('currentbid');
+          if (currentbid != null) {
+            nextbid = currentbid + 1;
           } else {
             nextbid = 1;
           }
+          console.log("Next bid " + nextbid);
           return socketIoClient.emit('bid', {
             value: nextbid
           });
@@ -91,14 +92,15 @@
     })();
     Bid = (function() {
       function Bid(bid_data) {
-        var $current_bid;
-        $current_bid = $('#current_bid');
-        if (!($current_bid[0] != null)) {
-          $current_bid = $('<div id="current_bid"/>');
-          $current_bid.appendTo('body');
+        var $currentbid;
+        $currentbid = $('#currentbid');
+        if (!($currentbid[0] != null)) {
+          $currentbid = $('<div id="currentbid"/>');
+          $currentbid.appendTo('body');
         }
-        $current_bid.data('current_bid', bid_data.value);
-        $current_bid.html("<img class=\"avatar\" src=\"" + bid_data.image + "\"> <span>current bid is: " + bid_data.value + " from " + bid_data.name + "</span>");
+        $currentbid.data('currentbid', bid_data.value);
+        $currentbid.html("&pound; " + bid_data.value + " Higest bid BY <img class=\"avatar\" src=\"" + bid_data.image + "\"> " + bid_data.name);
+        ($('.myBidButton')).html("Bid &pound; " + (bid_data.value + 1) + " Now");
       }
       return Bid;
     })();

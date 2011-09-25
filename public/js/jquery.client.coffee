@@ -39,11 +39,12 @@ $ ->
   class PageSetup
     constructor: ->
       $('button.bid').live 'click', ->
-        current_bid = $('#current_bid').data('current_bid')
-        if current_bid?
-          nextbid =  current_bid + 1
+        currentbid = $('#currentbid').data('currentbid')
+        if currentbid?
+          nextbid =  currentbid + 1
         else
           nextbid = 1
+        console.log("Next bid #{nextbid}")
         socketIoClient.emit 'bid', value: nextbid
 
       ($ '#facebook_button, #google_button, #create_account').click (e) ->
@@ -75,12 +76,14 @@ $ ->
 
   class Bid
     constructor: (bid_data) ->
-      $current_bid = $('#current_bid')
-      if !$current_bid[0]?
-        $current_bid = $('<div id="current_bid"/>')
-        $current_bid.appendTo('body')
-      $current_bid.data 'current_bid', bid_data.value
-      $current_bid.html "<img class=\"avatar\" src=\"#{bid_data.image}\"> <span>current bid is: #{bid_data.value} from #{bid_data.name}</span>"
+      $currentbid = $('#currentbid')
+      if !$currentbid[0]?
+        $currentbid = $('<div id="currentbid"/>')
+        $currentbid.appendTo('body')
+      $currentbid.data 'currentbid', bid_data.value
+      $currentbid.html "&pound; #{bid_data.value} Higest bid BY <img class=\"avatar\" src=\"#{bid_data.image}\"> #{bid_data.name}"
+
+      ($ '.myBidButton').html "Bid &pound; #{bid_data.value + 1} Now"
 
   class JoinRoom
     constructor: (msg)->
