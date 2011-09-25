@@ -11,7 +11,6 @@
           return new JoinRoom(msg);
         });
         socketIoClient.on("newbid", function(bid) {
-          console.log('newbid', bid);
           return new Bid(bid);
         });
         socketIoClient.on("disconnect", function() {
