@@ -43,13 +43,14 @@
     PageSetup = (function() {
       function PageSetup() {
         $('button.bid').live('click', function() {
-          var current_bid, nextbid;
-          current_bid = $('#current_bid').data('current_bid');
-          if (current_bid != null) {
-            nextbid = current_bid + 1;
+          var currentbid, nextbid;
+          currentbid = $('#currentbid').data('currentbid');
+          if (currentbid != null) {
+            nextbid = currentbid + 1;
           } else {
             nextbid = 1;
           }
+          console.log("Next bid " + nextbid);
           return socketIoClient.emit('bid', {
             value: nextbid
           });
@@ -96,6 +97,7 @@
         }
         $currentbid.data('currentbid', bid_data.value);
         $currentbid.html("&pound; " + bid_data.value + " Higest bid BY <img class=\"avatar\" src=\"" + bid_data.image + "\"> " + bid_data.name);
+        ($('.myBidButton')).html("Bid &pound; " + (bid_data.value + 1) + " Now");
       }
       return Bid;
     })();
