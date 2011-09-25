@@ -187,6 +187,15 @@ body {
 #status.offline {
   color: #FF0000; }
 
+#item p {
+  font-size: 10px;
+  margin: 0;
+  padding: 0; }
+
+#item img {
+  margin: 0; 
+  padding: 0; }
+
 #nextbid {
   text-align: center;  }
 
