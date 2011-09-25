@@ -6,11 +6,15 @@
     b[a] = b[a] or c
 ) window.console = window.console or {}
 (($) ->
-  window.socketIoClient = io.connect(null,
-    port: "#socketIoPort#"
-    rememberTransport: true
-    transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
-  )
+  window.socketIoClient = io.connect()
+
+#   window.socketIoClient = io.connect(null,
+#    port: "#socketIoPort#"
+#    rememberTransport: true
+#    transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
+#   )
+  
+
   socketIoClient.on "connect", ->
     $("#connected").addClass("on").find("strong").text "Online"
 
