@@ -26,7 +26,7 @@ $ ->
         new AdminButtons()
 
       socketIoClient.on "going", (data) ->
-        $("#status").find("p").text "#{data.left} seconds left"
+        $("#status").find("p").text data.message
 
       socketIoClient.on "over", (data) ->
         $("#status").find("p").text "Sold to #{data.name} for &pound; #{data.value}"
@@ -87,7 +87,7 @@ $ ->
         $currentbid = $('<div id="currentbid"/>')
         $currentbid.appendTo('body')
       $currentbid.data 'currentbid', bid_data.value
-      $currentbid.html "&pound; #{bid_data.value} Higest bid BY <img class=\"avatar\" src=\"#{bid_data.image}\"> #{bid_data.name}"
+      $currentbid.html "&pound; #{bid_data.value} Highest bid by <img class=\"avatar\" src=\"#{bid_data.image}\"> #{bid_data.name}"
 
       ($ '.myBidButton').html "Bid &pound; #{bid_data.value + 1} Now"
       ($ '#status').find("p").text "You are online and can bid."

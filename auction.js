@@ -280,24 +280,28 @@
       var a;
       this.broadcast('going once');
       this.broademit('going', {
-        left: 3
+        left: 3,
+        message: 'Going once!'
       });
       a = this;
       return this.going = setTimeout(function() {
         a.broadcast('going twice');
         a.broademit('going', {
-          left: 2
+          left: 2,
+          message: 'Going twice!'
         });
         return a.going = setTimeout(function() {
           a.broadcast('going three times');
           a.broademit('going', {
-            left: 1
+            left: 1,
+            message: 'Going three times...!'
           });
           return a.going = setTimeout(function() {
             a.trigger('auction_over');
             a.broadcast('Sold');
             return a.broademit('going', {
-              left: 0
+              left: 0,
+              message: 'Sold!'
             });
           }, 2500);
         }, 2500);
