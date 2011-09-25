@@ -167,12 +167,25 @@ body {
   display: inline-block;
   width: 320px; }
 
+#container.white {
+  background: #fff; }
+
 #header, #status, #item, #currentbid, #nextbid {
   margin: 0;
   border 0;
   float: left;
   width: 100%;  }
 
+#status {
+  text-align: center;
+  font-weight: bold; }
+
+
+#status.online {
+  color: #00FF00; }
+
+#status.offline {
+  color: #FF0000; }
 
 #nextbid {
   text-align: center;  }

@@ -6,7 +6,7 @@
         window.socketIoClient = io.connect();
         socketIoClient.on("connect", function() {
           var $activity;
-          $("#connected").addClass("on").find("strong").text("Online");
+          $("#status").removeClass("offline").addClass("online").find("p").text("You are online and can bid.");
           $activity = $('#activity');
           if ($activity.length !== 0) {
             $('#activity').empty();
@@ -34,7 +34,8 @@
           }, 2000);
         });
         socketIoClient.on("disconnect", function() {
-          return $("#connected").removeClass("on").find("strong").text("Offline");
+          $("#connected").removeClass("on").find("strong").text("Offline");
+          return $("#status").removeClass("online").addClass("offline").find("p").text("You are offline. please wait...");
         });
       }
       return SocketIO;

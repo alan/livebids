@@ -5,7 +5,7 @@ $ ->
 
 
       socketIoClient.on "connect", ->
-        $("#connected").addClass("on").find("strong").text "Online"
+        $("#status").removeClass("offline").addClass("online").find("p").text "You are online and can bid."
         $activity = $('#activity')
         if $activity.length != 0
           $('#activity').empty()
@@ -33,6 +33,7 @@ $ ->
 
       socketIoClient.on "disconnect", ->
         $("#connected").removeClass("on").find("strong").text "Offline"
+        $("#status").removeClass("online").addClass("offline").find("p").text "You are offline. please wait..."
 
   class PageSetup
     constructor: ->
