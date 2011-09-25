@@ -44,6 +44,10 @@
             value: nextbid
           });
         });
+        ($('#facebook_button, #google_button, #create_account')).click(function(e) {
+          e.preventDefault();
+          return alert('Please use twitter');
+        });
       }
       return PageSetup;
     })();

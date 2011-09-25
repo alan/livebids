@@ -35,6 +35,10 @@ $ ->
           nextbid = 1
         socketIoClient.emit 'bid', value: nextbid
 
+      ($ '#facebook_button, #google_button, #create_account').click (e) ->
+        e.preventDefault()
+        alert('Please use twitter')
+
   class AdminButtons
     constructor: ->
       $('button.going').live 'click', -> socketIoClient.emit 'going_auction'
