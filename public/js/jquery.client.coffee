@@ -1,11 +1,7 @@
 $ ->
   class SocketIO
     constructor: ->
-      window.socketIoClient = io.connect(null,
-        port: "#socketIoPort#"
-        rememberTransport: true
-        transports: [ "websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket" ]
-      )
+      window.socketIoClient = io.connect()
 
       socketIoClient.on "connect", ->
         $("#connected").addClass("on").find("strong").text "Online"

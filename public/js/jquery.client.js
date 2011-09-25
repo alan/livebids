@@ -3,11 +3,7 @@
     var Bid, JoinRoom, PageSetup, SocketIO;
     SocketIO = (function() {
       function SocketIO() {
-        window.socketIoClient = io.connect(null, {
-          port: "#socketIoPort#",
-          rememberTransport: true,
-          transports: ["websocket", "xhr-multipart", "xhr-polling", "htmlfile", "flashsocket"]
-        });
+        window.socketIoClient = io.connect();
         socketIoClient.on("connect", function() {
           return $("#connected").addClass("on").find("strong").text("Online");
         });
