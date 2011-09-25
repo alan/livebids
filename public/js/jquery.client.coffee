@@ -44,6 +44,3 @@ $ ->
 
   new SocketIO()
   new PageSetup()
-
-
-

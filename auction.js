@@ -111,6 +111,7 @@
         active: 'active'
       },
       callback: function(bid, bidder) {
+        bid.user = bidder.user;
         console.log("auction " + this.item + " got bid " + bid.value + " from " + bidder.user);
         if (!(this.current_bid != null)) {
           console.log("first bid accepted " + bid.value + " from " + bidder.user);

@@ -54,6 +54,7 @@ events =
     transitions:
       active: 'active'
     callback: (bid, bidder) ->
+      bid.user = bidder.user
       # auction logic
       console.log "auction #{@item} got bid #{bid.value} from #{bidder.user}"
       if !@current_bid?
