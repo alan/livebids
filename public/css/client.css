@@ -158,3 +158,38 @@ strong {
   color: #FFF;
   float: left;
   width: 100%; }
+
+body {
+  width: 100%;
+  text-align: center; }
+
+#container {
+  display: inline-block;
+  width: 320px; }
+
+#header, #status, #item, #currentbid, #nextbid {
+  margin: 0;
+  border 0;
+  float: left;
+  width: 100%;  }
+
+
+#nextbid {
+  text-align: center;  }
+
+.myBidButton {
+     -moz-border-radius:5px;
+     -webkit-border-radius:5px;
+     background-color:#006837;
+     border-radius:5px;
+     border:1px solid #d83526;
+     display: inline-block;
+     color:#ffffff;
+     font-family:Arial Black, sans-serif;
+     padding: 3%;
+     text-decoration:none;
+     text-shadow:1px 0px 0px #98231a;
+     width:80%;
+     font-size:20px;
+     text-align:center;    }
+
