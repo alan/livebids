@@ -280,11 +280,11 @@
             left: 1
           });
           return a.going = setTimeout(function() {
-            a.broadcast('Sold!');
-            a.broademit('going', {
+            a.trigger('auction_over');
+            a.broadcast('Sold');
+            return a.broademit('going', {
               left: 0
             });
-            return a.trigger('auction_over');
           }, 2500);
         }, 2500);
       }, 2500);

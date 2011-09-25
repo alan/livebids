@@ -163,9 +163,9 @@ class Auction extends StateMachine
          a.broadcast 'going three times'
          a.broademit 'going', left: 1
          a.going = setTimeout ->
-            a.broadcast 'Sold!'
-            a.broademit 'going', left: 0
             a.trigger 'auction_over'
+            a.broadcast 'Sold'
+            a.broademit 'going', left: 0
          , 2500
        , 2500
      , 2500
