@@ -1,8 +1,8 @@
 (function(){ 
   this.templates || (this.templates = {});
   this.templates["joiner"] = function anonymous(data) {
-var a,i,li,ol,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);};i = function(){return __ck.tag('i', arguments);};li = function(){return __ck.tag('li', arguments);};ol = function(){return __ck.tag('ol', arguments);};p = function(){return __ck.tag('p', arguments);};s = function(){return __ck.tag('s', arguments);};span = function(){return __ck.tag('span', arguments);};th = function(){return __ck.tag('th', arguments);};u = function(){return __ck.tag('u', arguments);};img = function(){return __ck.tag('img', arguments);};var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };
-    var coffeescript, comment, doctype, h, ie, tag, text, __ck, _ref, _ref2;
+var a,i,li,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);};i = function(){return __ck.tag('i', arguments);};li = function(){return __ck.tag('li', arguments);};p = function(){return __ck.tag('p', arguments);};s = function(){return __ck.tag('s', arguments);};span = function(){return __ck.tag('span', arguments);};th = function(){return __ck.tag('th', arguments);};u = function(){return __ck.tag('u', arguments);};img = function(){return __ck.tag('img', arguments);};var __slice = Array.prototype.slice;var __hasProp = Object.prototype.hasOwnProperty;var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };var __extends = function(child, parent) {  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }  function ctor() { this.constructor = child; }  ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype;  return child; };var __indexOf = Array.prototype.indexOf || function(item) {  for (var i = 0, l = this.length; i < l; i++) {    if (this[i] === item) return i;  } return -1; };
+    var coffeescript, comment, doctype, h, ie, tag, text, yield, __ck, _ref, _ref2;
     if (data == null) {
       data = {};
     }
@@ -45,7 +45,7 @@ var a,i,li,ol,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);}
         _ref3 = str.split('.');
         for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
           i = _ref3[_i];
-          if (i.indexOf('#') === 0) {
+          if (__indexOf.call(i, '#') >= 0) {
             id = i.replace('#', '');
           } else {
             if (i !== '') {
@@ -68,15 +68,21 @@ var a,i,li,ol,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);}
           return text('"');
         }
       },
-      render_attrs: function(obj) {
+      render_attrs: function(obj, prefix) {
         var k, v, _results;
+        if (prefix == null) {
+          prefix = '';
+        }
         _results = [];
         for (k in obj) {
           v = obj[k];
           if (typeof v === 'boolean' && v) {
             v = k;
           }
-          _results.push(v ? text(" " + k + "=\"" + (this.esc(v)) + "\"") : void 0);
+          if (typeof v === 'function') {
+            v = "(" + v + ").call(this);";
+          }
+          _results.push(typeof v === 'object' && !(v instanceof Array) ? this.render_attrs(v, prefix + k + '-') : v ? text(" " + (prefix + k) + "=\"" + (this.esc(v)) + "\"") : void 0);
         }
         return _results;
       },
@@ -159,6 +165,15 @@ var a,i,li,ol,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);}
       }
       return __ck.render_tag(name, idclass, attrs, contents);
     };
+    yield = function(f) {
+      var old_buffer, temp_buffer;
+      temp_buffer = [];
+      old_buffer = __ck.buffer;
+      __ck.buffer = temp_buffer;
+      f();
+      __ck.buffer = old_buffer;
+      return temp_buffer.join('');
+    };
     h = function(txt) {
       return String(txt).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     };
@@ -213,7 +228,6 @@ var a,i,li,ol,p,s,span,th,u,img;a = function(){return __ck.tag('a', arguments);}
     "class": 'avatar',
     src: this.data.img_src
   });
-  console.log(this.data.service);
   if (this.data.service) {
     return img({
       "class": 'service',
