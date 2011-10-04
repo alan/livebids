@@ -202,9 +202,10 @@
         } else {
           console.log("bid rejected");
           this.biddercast(bidder, "sorry, you've been out bid already");
-          return this.bidderemit(bidder, "bidstatus", {
+          this.bidderemit(bidder, "bidstatus", {
             accepted: false
           });
+          return this.bidderemit(bidder, "newbid", this.current_bid);
         }
       }
     }
