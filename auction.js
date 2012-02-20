@@ -43,6 +43,7 @@
         var p;
         this.bidders.push(bidder);
         this.bidderemit(bidder, 'startup');
+        this.bidderemit("newbid", this.current_bid);
         this.broadcast("new bidder! " + bidder.name);
         this.broademit("bidder_joined", {
           bidders: (function() {

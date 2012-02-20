@@ -28,6 +28,7 @@ events =
       # todo , regisiter a 'disconnect' handler?
       @bidders.push bidder
       @bidderemit bidder, 'startup'
+      @bidderemit "newbid", @current_bid
       @broadcast "new bidder! #{bidder.name}"
       @broademit "bidder_joined", bidders: (p.id for p in @bidders)
       true
