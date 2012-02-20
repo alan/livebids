@@ -198,6 +198,7 @@ body {
   padding: 0; }
 
 #nextbid {
+  padding-bottom: 3px;
   text-align: center;  }
 
 .top_logo {
@@ -230,9 +231,12 @@ body {
      padding: 3%;
      text-decoration:none;
      width:80%;
-     float:left;
      font-size:20px;
      text-align:center;
-     margin-left:7%
      }
+
+img.avatar {
+  width: 48px;
+  height: 48px;
+  background: #AAAAAA; }
 
