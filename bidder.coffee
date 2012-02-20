@@ -32,7 +32,7 @@ class Bidder extends EE
       new_client.leave('/' + @sid)
       new_client.join('activity')
 
-    if @name == 'bids live'
+    if @name == 'CharityBid'
       console.log "admin actions for new connected client"
       @emit 'adminbuttons'
       new_client.on 'stop_auction', () =>

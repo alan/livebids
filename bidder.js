@@ -44,7 +44,7 @@
         new_client.leave('/' + this.sid);
         return new_client.join('activity');
       }, this));
-      if (this.name === 'bids live') {
+      if (this.name === 'CharityBid') {
         console.log("admin actions for new connected client");
         this.emit('adminbuttons');
         new_client.on('stop_auction', __bind(function() {
