@@ -174,8 +174,8 @@ class Auction extends StateMachine
             a.trigger 'auction_over'
             a.broadcast 'Sold'
             a.broademit 'going', left: 0, message: 'Sold!'
-         , 2500
-       , 2500
+         , 3500
+       , 3000
      , 2500
 
 
