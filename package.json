@@ -11,7 +11,7 @@
     "connect-assetmanager-handlers" : "0.0.17",
     "ejs" : "0.4.3",
     "express" : "2.4.6",
-    "socket.io" : "0.8.4",
+    "socket.io" : "0.9.10",
     "connect-redis" : "1.0.7",
     "connect-notifo" : "0.0.1",
     "airbrake" : "0.2.0",
